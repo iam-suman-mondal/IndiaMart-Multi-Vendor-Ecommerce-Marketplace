@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+  --color-primary: #2F80ED;
+  --color-primary-dark: #1565C0;
+
+  --color-secondary: #F5A623;
+  --color-secondary-dark: #E67E22;
+
+  --color-bg: #F5F5F5;
+  --color-surface: #FFFFFF;
+
+  --color-border: #DDDDDD;
+
+  --color-text: #333333;
+  --color-text-light: #666666;
+
+  --color-footer: #1F1F1F;
+}
