@@ -18,6 +18,10 @@ import VendorDashboard from '../pages/vendor/dashboard/Dashboard'
 import VendorProfile from '../pages/vendor/profile/Profile'
 import AdminDashboard from '../pages/admin/dashboard/pages/Dashboard'
 import AdminProfile from '../pages/admin/profile/Profile'
+import AdminVendors from '../pages/admin/vendor/pages/Vendors'
+import AdminCustomers from '../pages/admin/customers/pages/Customers'
+import AdminProducts from '../pages/admin/products/pages/Products'
+import AdminCategories from '../pages/admin/category/pages/Category'
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -92,6 +96,22 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <AdminDashboard />,
+      },
+      {
+        path: 'vendors',
+        element: <AdminVendors />
+      },
+      {
+        path: 'customers',
+        element: <AdminCustomers />
+      },
+      {
+        path: 'Products',
+        element: <AdminProducts />
+      },
+      {
+        path: 'categories',
+        element: <AdminCategories />
       },
       {
         path: "profile",
