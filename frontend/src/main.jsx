@@ -4,6 +4,7 @@ import { RouterProvider } from "react-router";
 import { router } from "./routers/router";
 import { ToastContainer } from "react-toastify";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
