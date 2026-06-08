@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Sidebar = () => {
+  const navigate=useNavigate();
   return (
     <aside className="bg-white border-end vh-100 p-3 position-sticky top-0 start-0 d-flex flex-column"
       style={{
@@ -50,7 +51,8 @@ const Sidebar = () => {
           <li>
             <button type="button"
             className="btn btn-outline-danger w-100 py-2 fw-bold rounded-3"
-            >
+            onClick={()=>navigate('/auth/vendor/login')}
+           >
             Logout
             </button>
           </li>
