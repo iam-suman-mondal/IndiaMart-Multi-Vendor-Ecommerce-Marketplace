@@ -9,18 +9,20 @@ import AdminLayout from "../layouts/AdminLayout";
 
 // Pages
 import Products from "../pages/public/products/Product";
-import ProductDetails from "../pages/public/products/ProductDetails";
 import CustomerLogin from '../pages/auth/CustomerLogin'
 import VendorSignup from '../pages/auth/VendorSignup'
 import VendorLogin from "../pages/auth/VendorLogin"
 import AdminLogin from "../pages/auth/AdminLogin"
 import CustomerSignup from '../pages/auth/CustmerSignup'
+import ProductDetails from "../pages/public/public_home/components/ProductDetails"
 import CustomerProfile from '../pages/customer/profile/Profile'
 import CustomerOrders from '../pages/customer/orders/Orders'
 import VendorDashboard from '../pages/vendor/dashboard/Dashboard'
 import VendorProfile from '../pages/vendor/profile/Profile'
 import AdminDashboard from '../pages/admin/dashboard/pages/Dashboard'
 import AdminProfile from '../pages/admin/profile/Profile'
+import PublicHome from "../pages/public/public_home/pages/home_page";
+import CategoryPage from "../pages/public/public_home/pages/Category_page";
 
 
 export const router = createBrowserRouter([
@@ -31,10 +33,14 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Products />,
+        element: <PublicHome/>,
       },
       {
-        path: "products/:id",
+        path: "category/:category",
+        element: <CategoryPage />,
+      },
+      {
+        path: "product/:id",
         element: <ProductDetails />,
       },
     ],

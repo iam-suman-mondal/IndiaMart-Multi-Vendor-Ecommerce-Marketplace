@@ -7,11 +7,11 @@ import Footer from '../pages/customer/shared/components/Footer'
 const AuthLayout = () => {
   return (
     <>
-    <Header/>
+    
     <main className='min-min-vh-100'>
         <Outlet />
     </main>
-    <Footer/>
+   
     </>
   )
 }
