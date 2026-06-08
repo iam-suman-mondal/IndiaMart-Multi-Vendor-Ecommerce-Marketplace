@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router';
 import {
   FaEnvelope,
   FaPhone,
@@ -27,6 +28,7 @@ export default function Footer() {
           <div className="col-md-4 mb-3">
             <h5>Quick Links</h5>
             <ul className="list-unstyled">
+              <li><Link to="/auth/vendor/signup" className="text-light text-decoration-none">Become a vendor</Link></li>
               <li><a href="/" className="text-light text-decoration-none">Home</a></li>
               <li><a href="/products" className="text-light text-decoration-none">Products</a></li>
               <li><a href="/cart" className="text-light text-decoration-none">Cart</a></li>

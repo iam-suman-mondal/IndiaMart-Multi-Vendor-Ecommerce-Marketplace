@@ -37,14 +37,14 @@ export default function NavBar() {
         {/* ACTION BUTTONS SECTION (Stays neatly grouped on the right side) */}
         <div className="order-2 order-md-3 d-flex align-items-center gap-2 gap-sm-3 loose-buttons ms-auto ms-md-0">
           <Link
-            to="/user_login"
+            to="/auth/customer/login"
             className="btn btn-outline-primary btn-sm rounded-pill px-3"
           >
             Login
           </Link>
 
           <Link
-            to="/signup"
+            to="/auth/customer/signup"
             className="btn btn-primary btn-sm rounded-pill px-3"
           >
             Signup
