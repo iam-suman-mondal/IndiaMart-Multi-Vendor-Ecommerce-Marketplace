@@ -9,7 +9,7 @@ import AdminLayout from "../layouts/AdminLayout";
 
 // Pages
 import Products from "../pages/public/products/Product";
-import ProductDetails from "../pages/public/products/ProductDetails";
+import ProductDetails from "../pages/public/public_home/components/ProductDetails"
 import Login from '../pages/auth/Login'
 import Signup from '../pages/auth/Signup'
 import CustomerProfile from '../pages/customer/profile/Profile'
@@ -18,6 +18,8 @@ import VendorDashboard from '../pages/vendor/dashboard/Dashboard'
 import VendorProfile from '../pages/vendor/profile/Profile'
 import AdminDashboard from '../pages/admin/dashboard/pages/Dashboard'
 import AdminProfile from '../pages/admin/profile/Profile'
+import PublicHome from "../pages/public/public_home/pages/home_page";
+import CategoryPage from "../pages/public/public_home/pages/Category_page";
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -27,10 +29,14 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Products />,
+        element: <PublicHome/>,
       },
       {
-        path: "products/:id",
+        path: "category/:category",
+        element: <CategoryPage />,
+      },
+      {
+        path: "product/:id",
         element: <ProductDetails />,
       },
     ],
