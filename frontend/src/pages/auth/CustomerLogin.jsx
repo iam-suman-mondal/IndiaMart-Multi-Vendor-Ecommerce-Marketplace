@@ -20,8 +20,6 @@ const CustomerLogin = () => {
     >
       <div className="card shadow p-4" style={{ width: "650px" }}>
         <h1 className="text-center mb-4"> Customer Login</h1>
-
-        <form>
          
 
           <div className="row mb-3">
@@ -68,7 +66,6 @@ const CustomerLogin = () => {
               Login
             </button>
           </div>
-        </form>
       </div>
     </div>
   )
