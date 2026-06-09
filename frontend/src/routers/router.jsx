@@ -31,7 +31,7 @@ import AdminVendors from '../pages/admin/vendor/pages/Vendors'
 import AdminCustomers from '../pages/admin/customers/pages/Customers'
 import AdminProducts from '../pages/admin/products/pages/Products'
 import AdminCategories from '../pages/admin/category/pages/Category'
-import PublicHome from "../pages/public/public_home/pages/home_page";
+import PublicHome from "../pages/public/public_home/pages/Home_page";
 import CategoryPage from "../pages/public/public_home/pages/Category_page";
 
 export const router = createBrowserRouter([
