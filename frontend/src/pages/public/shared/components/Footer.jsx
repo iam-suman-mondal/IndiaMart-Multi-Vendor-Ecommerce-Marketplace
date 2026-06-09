@@ -29,6 +29,7 @@ export default function Footer() {
             <h5>Quick Links</h5>
             <ul className="list-unstyled">
               <li><Link to="/auth/vendor/signup" className="text-light text-decoration-none">Become a vendor</Link></li>
+              <li><Link to="/auth/admin/login" className="text-light text-decoration-none">Admin Login (temp)</Link></li>
               <li><a href="/" className="text-light text-decoration-none">Home</a></li>
               <li><a href="/products" className="text-light text-decoration-none">Products</a></li>
               <li><a href="/cart" className="text-light text-decoration-none">Cart</a></li>

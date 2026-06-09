@@ -21,9 +21,6 @@ const VendorLogin = () => {
       <div className="card shadow p-4" style={{ width: "650px" }}>
         <h1 className="text-center mb-4">Vendor Login</h1>
 
-        <form>
-         
-
           <div className="row mb-3">
             <label className="col-md-3 col-form-label fw-bold">
               Email
@@ -68,7 +65,6 @@ const VendorLogin = () => {
               Login
             </button>
           </div>
-        </form>
       </div>
     </div>
   )
