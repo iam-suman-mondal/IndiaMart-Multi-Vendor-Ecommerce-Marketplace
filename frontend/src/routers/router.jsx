@@ -8,7 +8,6 @@ import VendorLayout from "../layouts/VendorLayout";
 import AdminLayout from "../layouts/AdminLayout";
 
 // Pages
-import Products from "../pages/public/products/Product";
 import CustomerLogin from '../pages/auth/CustomerLogin'
 import VendorSignup from '../pages/auth/VendorSignup'
 import VendorLogin from "../pages/auth/VendorLogin"
