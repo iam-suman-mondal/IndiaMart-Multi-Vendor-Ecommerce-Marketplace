@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "21nFsYbc5AI=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\LoggerService.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\suman\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.9\\microsoft.aspnetcore.openapi.10.0.9.nupkg.sha512",
+    "C:\\Users\\suman\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512",
+    "C:\\Users\\suman\\.nuget\\packages\\rabbitmq.client\\7.2.1\\rabbitmq.client.7.2.1.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\LoggerService.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\LoggerService.csproj",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}

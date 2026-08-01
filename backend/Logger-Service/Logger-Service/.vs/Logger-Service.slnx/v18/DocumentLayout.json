@@ -1,0 +1,111 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|c:\\users\\suman\\desktop\\merge_backend\\logger-service\\loggerservice\\services\\rabbitmqconsumerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|solutionrelative:loggerservice\\services\\rabbitmqconsumerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|c:\\users\\suman\\desktop\\merge_backend\\logger-service\\loggerservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|solutionrelative:loggerservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|c:\\users\\suman\\desktop\\merge_backend\\logger-service\\loggerservice\\services\\fileloggerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|solutionrelative:loggerservice\\services\\fileloggerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|c:\\users\\suman\\desktop\\merge_backend\\logger-service\\loggerservice\\models\\logmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|solutionrelative:loggerservice\\models\\logmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|c:\\users\\suman\\desktop\\merge_backend\\logger-service\\loggerservice\\loggerservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{D1413221-5398-7A6C-44B2-FF90B7E543B7}|LoggerService\\LoggerService.csproj|solutionrelative:loggerservice\\loggerservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0174dea2-fdbe-4ef1-8f99-c0beae78880f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\Program.cs",
+              "RelativeDocumentMoniker": "LoggerService\\Program.cs",
+              "ToolTip": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\Program.cs",
+              "RelativeToolTip": "LoggerService\\Program.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBQAAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-27T10:24:56.067Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RabbitMqConsumerService.cs",
+              "DocumentMoniker": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\Services\\RabbitMqConsumerService.cs",
+              "RelativeDocumentMoniker": "LoggerService\\Services\\RabbitMqConsumerService.cs",
+              "ToolTip": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\Services\\RabbitMqConsumerService.cs",
+              "RelativeToolTip": "LoggerService\\Services\\RabbitMqConsumerService.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAEwFkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-27T10:02:29.567Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FileLoggerService.cs",
+              "DocumentMoniker": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\Services\\FileLoggerService.cs",
+              "RelativeDocumentMoniker": "LoggerService\\Services\\FileLoggerService.cs",
+              "ToolTip": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\Services\\FileLoggerService.cs",
+              "RelativeToolTip": "LoggerService\\Services\\FileLoggerService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-27T07:14:57.519Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LogMessage.cs",
+              "DocumentMoniker": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\Models\\LogMessage.cs",
+              "RelativeDocumentMoniker": "LoggerService\\Models\\LogMessage.cs",
+              "ToolTip": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\Models\\LogMessage.cs",
+              "RelativeToolTip": "LoggerService\\Models\\LogMessage.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAAABAAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-27T07:11:43.712Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LoggerService.csproj",
+              "DocumentMoniker": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\LoggerService.csproj",
+              "RelativeDocumentMoniker": "LoggerService\\LoggerService.csproj",
+              "ToolTip": "C:\\Users\\suman\\Desktop\\merge_backend\\Logger-Service\\LoggerService\\LoggerService.csproj",
+              "RelativeToolTip": "LoggerService\\LoggerService.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-27T07:04:48.897Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

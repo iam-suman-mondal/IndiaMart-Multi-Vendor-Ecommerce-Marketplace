@@ -1,0 +1,10 @@
+|2026-07-29 06:20:44||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Message|-|RequestId: 61f06970-509c-4bc8-9690-7257f54b1bc4|
+|2026-07-29 06:31:29||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Product added successfully|-|RequestId: bdc5a56a-1c71-41d4-8d8c-663c9e8356bf|
+|2026-07-29 06:33:44||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Product added successfully|-|RequestId: 3188996d-e592-47e0-aa3b-c2482badaa7b|
+|2026-07-29 06:33:56||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Product added successfully|-|RequestId: df32bbf2-9af0-477e-a908-c856ab38365e|
+|2026-07-29 06:39:06||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Message|-|RequestId: 0a6c3aeb-a422-4d0c-9de8-b9789edfebdc|
+|2026-07-29 06:44:23||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Product added successfully|-|RequestId: 87f86362-02ec-4c7c-ae38-5f33e417157d|
+|2026-07-29 06:59:52||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Message|-|RequestId: 0c763815-4114-4db4-be4b-f977ee17f8ab|
+|2026-07-29 08:44:53||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Message|-|RequestId: 068ae04b-7cf7-4d51-9e71-e5a9ce07188f|
+|2026-07-29 08:45:23||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Product added successfully|-|RequestId: 861011d7-fae4-4bb1-ac5d-a41770550066|
+|2026-07-29 09:04:49||Service: ProductService|-|User: 2|-|Role: ROLE_VENDOR|-|INFO|-|Message|-|RequestId: 8661ecc4-e43f-4fe6-8c01-5f59fa6a79be|
