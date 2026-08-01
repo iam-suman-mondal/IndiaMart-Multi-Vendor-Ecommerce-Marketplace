@@ -3,19 +3,24 @@ package com.cdac.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cdac.dto.AdminDashboardAnalyticsDto;
+import com.cdac.dto.ApiResponse;
 import com.cdac.dto.CustomerProfileDTO;
+import com.cdac.dto.VendorDto;
 import com.cdac.service.AuthService;
 import com.cdac.service.CustomerService;
+import com.cdac.service.VendorService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +28,11 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/customers")
+@RequestMapping("/admin")
 public class AdminController {
 	private final CustomerService customerService;
 	private final AuthService authService;
+	private final VendorService vendorService;
 
     // Customer-related API
     @GetMapping("/customers/{id}")
@@ -89,6 +95,35 @@ public class AdminController {
     public ResponseEntity<AdminDashboardAnalyticsDto> getVendorDashboardAnalytics(@RequestParam String param) {
         return ResponseEntity.ok(null); // Todo
     }
+    
+    //vendor endpoints
+    
+    //Get All Vendors
+    @GetMapping("/vendors/all")
+    public ResponseEntity<?> getAllVendors() {
+        return ResponseEntity.ok(vendorService.getAllVendors());
+    }
+    
+    
+    
+    //Update Vendor by Admin using Path Variable
+    @PutMapping("/update-vendor/{id}")
+    public ResponseEntity<ApiResponse> updateVendor(
+            @PathVariable Long id, 
+            @Valid @RequestBody VendorDto vendorDto) {
+        
+        ApiResponse response = vendorService.updateVendor(id, vendorDto);
+        return ResponseEntity.ok(response);
+    }
+    
+    
+ // Delete Vendor by Admin using Path Variable
+    @DeleteMapping("/delete-vendor/{id}")
+    public ResponseEntity<ApiResponse> deleteVendor(@PathVariable Long id) {
+        ApiResponse response = vendorService.deleteVendor(id);
+        return ResponseEntity.ok(response);
+    }
+    
     
     
 }

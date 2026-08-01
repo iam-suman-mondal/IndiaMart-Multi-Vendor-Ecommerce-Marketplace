@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 @RestController
 //@RestControllerEndpoint
-@RequestMapping("/auth")
+@RequestMapping("/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 	private final OtpService otpService;
@@ -43,7 +43,7 @@ public class CustomerController {
     
      
 
-    @DeleteMapping("/customers/profile")
+    @DeleteMapping("/profile")
     public ResponseEntity<?> deleteCustomerProfile(
             @RequestHeader("X-User-Id") Long userId,
             @RequestHeader("X-User-Email") String email) {
@@ -54,4 +54,8 @@ public class CustomerController {
                 "Customer profile deleted successfully"
         );
     }
+    
+    //ToDo
+    //1. Update Customer Profile Implementation
+  //2. Delete Customer Profile Implementation
 }
