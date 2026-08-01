@@ -18,8 +18,8 @@ public class LoginResponseDTO {
 	    private String email;
 	    private String name;
 	    private Role role;
-//	    we  will add later
-//	    private String token;
+	    private String accessToken;
+	    private String refreshToken;
 		public LoginResponseDTO(Long id, String email, String name, Role role) {
 			super();
 			this.id = id;

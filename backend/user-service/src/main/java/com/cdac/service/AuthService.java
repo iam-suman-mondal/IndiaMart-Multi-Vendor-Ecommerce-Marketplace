@@ -21,6 +21,7 @@ void resetPassword(ResetPasswordDTO request);
 
 void banUnban(Long adminId, String adminEmail, Long userId);
 
+LoginResponseDTO refreshAccessToken(String refreshToken);
 
 //@Nullable 
 //ApiResponse login(LoginRequest request);

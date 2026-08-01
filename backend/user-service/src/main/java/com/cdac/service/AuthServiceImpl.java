@@ -20,6 +20,7 @@ import com.cdac.entities.User;
 
 import com.cdac.repository.CustomerRepository;
 import com.cdac.repository.UserRepository;
+import com.cdac.security.JwtUtils;
 
 import lombok.RequiredArgsConstructor;
 @Service
@@ -29,37 +30,87 @@ public class AuthServiceImpl implements AuthService{
 	private final UserRepository userRepo;
      private final PasswordEncoder passwordEncoder;
      private final CustomerRepository customerRepo;
+     private final JwtUtils jwtUtils;
 //     private final CentralLoggerService centralLogger;
    private final OtpService otpService;
   
 //     private final VendorClient vendorClient ; 
-	@Override
-	public LoginResponseDTO login(LoginRequest request) {
-		
-		// TODO Auto-generated method stub
-		 User user = userRepo
-	                .findByEmail(request.getEmail())
-	                .orElseThrow(() ->
-	                    new RuntimeException("Invalid email or password")
-	                );
+   
+   
+// private final VendorClient vendorClient ; 
+@Override
+public LoginResponseDTO login(LoginRequest request) {
+	
+	// TODO Auto-generated method stub
+	 User user = userRepo
+                .findByEmail(request.getEmail())
+                .orElseThrow(() ->
+                    new RuntimeException("Invalid email or password")
+                );
 
-	        boolean passwordMatches =
-	                passwordEncoder.matches(
-	                    request.getPassword(),
-	                    user.getPassword()
-	                );
-//		 if (!request.getPassword().equals(user.getPassword())) {
-//		        throw new RuntimeException("Invalid email or password");
-//		    }
+        boolean passwordMatches =
+                passwordEncoder.matches(
+                    request.getPassword(),
+                    user.getPassword()
+                );
+//	 if (!request.getPassword().equals(user.getPassword())) {
+//	        throw new RuntimeException("Invalid email or password");
+//	    }
 
 
-	        if (!passwordMatches) {
-	            throw new RuntimeException(
-	                "Invalid email or password"
-	            );
-	        }
-		return  new LoginResponseDTO( user.getId(),user.getEmail(),user.getName(),user.getRole());
-	}
+        if (!passwordMatches) {
+            throw new RuntimeException(
+                "Invalid email or password"
+            );
+        }
+        String accessToken = jwtUtils.generateAccessToken(
+                user.getId(), 
+                user.getEmail(), 
+                user.getRole().name()
+        );
+        
+        String refreshToken = jwtUtils.generateRefreshToken(
+                user.getEmail()
+        );
+        LoginResponseDTO response = new LoginResponseDTO(
+                user.getId(),
+                user.getEmail(),
+                user.getName(),
+                user.getRole()
+        );
+        
+        response.setAccessToken(accessToken);
+        response.setRefreshToken(refreshToken);
+
+        return response;
+}
+//	@Override
+//	public LoginResponseDTO login(LoginRequest request) {
+//		
+//		// TODO Auto-generated method stub
+//		 User user = userRepo
+//	                .findByEmail(request.getEmail())
+//	                .orElseThrow(() ->
+//	                    new RuntimeException("Invalid email or password")
+//	                );
+//
+//	        boolean passwordMatches =
+//	                passwordEncoder.matches(
+//	                    request.getPassword(),
+//	                    user.getPassword()
+//	                );
+////		 if (!request.getPassword().equals(user.getPassword())) {
+////		        throw new RuntimeException("Invalid email or password");
+////		    }
+//
+//
+//	        if (!passwordMatches) {
+//	            throw new RuntimeException(
+//	                "Invalid email or password"
+//	            );
+//	        }
+//		return  new LoginResponseDTO( user.getId(),user.getEmail(),user.getName(),user.getRole());
+//	}
 	@Override
 	public void updatePassword(Long userId, String email, UpdatePasswordDto request) {
 		 // 1. Find user
@@ -315,5 +366,43 @@ public class AuthServiceImpl implements AuthService{
 	}
 
 	
+	
+	@Override
+	public LoginResponseDTO refreshAccessToken(String refreshToken) {
+
+	    // Validate Refresh Token
+	    if (!jwtUtils.validateToken(refreshToken)) {
+	        throw new RuntimeException("Invalid Refresh Token");
+	    }
+
+	    // Extract Email
+	    String email = jwtUtils.extractEmail(refreshToken);
+
+	    // Fetch latest user details
+	    User user = userRepo.findByEmail(email)
+	            .orElseThrow(() -> new RuntimeException("User not found"));
+
+	    // Generate NEW Access Token
+	    String newAccessToken = jwtUtils.generateAccessToken(
+	            user.getId(),
+	            user.getEmail(),
+	            user.getRole().name()
+	    );
+
+	    // Prepare Response
+	    LoginResponseDTO response = new LoginResponseDTO(
+	            user.getId(),
+	            user.getEmail(),
+	            user.getName(),
+	            user.getRole()
+	    );
+
+	    response.setAccessToken(newAccessToken);
+
+	    // Return the same refresh token
+	    response.setRefreshToken(refreshToken);
+
+	    return response;
+	}
 	
 }
