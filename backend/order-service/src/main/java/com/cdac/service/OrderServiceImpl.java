@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
 	private final ProductServiceClient productServiceClient;
 	private final UserServiceClient userServiceClient;
 	private final PaymentServiceClient paymentServiceClient;
-	private final CentralLoggerService loggerService;
+	//private final CentralLoggerService loggerService;
 	private final NotificationService notificationService;
 	
 	@Override
@@ -196,11 +196,11 @@ public class OrderServiceImpl implements OrderService {
 	    /*
 	     * Generate Log: Order placed successfully
 	     */
-	    loggerService.info(
-	            "ROLE_CUSTOMER",
-	            customerId,
-	            "Order placed successfully"
-	    );
+//	   loggerService.info(
+//	            "ROLE_CUSTOMER",
+//	            customerId,
+//	            "Order placed successfully"
+//	    );
 	    
 	    /*
 	     *  Return Response
