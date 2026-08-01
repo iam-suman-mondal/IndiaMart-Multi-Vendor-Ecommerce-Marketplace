@@ -29,7 +29,8 @@ import Orders from "../pages/customer/orders/Orders";
 import AdminVendors from '../pages/admin/vendor/pages/Vendors'
 import AdminCustomers from '../pages/admin/customers/pages/Customers'
 import AdminProducts from '../pages/admin/products/pages/Products'
-import AdminCategories from '../pages/admin/category/pages/Category'
+import AdminOrders from '../pages/admin/orders/pages/Orders'
+import AdminPayments from '../pages/admin/payments/pages/Payments'
 import PublicHome from "../pages/public/public_home/pages/Home_page";
 import CategoryPage from "../pages/public/public_home/pages/Category_page";
 
@@ -155,12 +156,16 @@ export const router = createBrowserRouter([
         element: <AdminCustomers />
       },
       {
-        path: 'Products',
+        path: 'products',
         element: <AdminProducts />
       },
       {
-        path: 'categories',
-        element: <AdminCategories />
+        path: 'orders',
+        element: <AdminOrders />
+      },
+      {
+        path: 'payments',
+        element: <AdminPayments />
       },
       {
         path: "profile",

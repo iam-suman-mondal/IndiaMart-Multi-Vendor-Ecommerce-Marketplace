@@ -35,7 +35,7 @@ const Sidebar = () => {
         {/* Mobile Header */}
         <div className="offcanvas-header d-md-none border-bottom">
           <h5 className="offcanvas-title" id="adminSidebarLabel">
-            <Link to='/admin' className="text-decoration-none" style={{'cursor': 'pointer'}}>Ecommerce</Link>
+            <Link to='/admin' className="text-decoration-none" style={{'cursor': 'pointer'}}>IndiaMart</Link>
           </h5>
           <button
             type="button"
@@ -50,7 +50,7 @@ const Sidebar = () => {
         <div className="offcanvas-body d-flex flex-column p-3 h-100">
           {/* Desktop Header */}
           <h4 className="d-none d-md-block border-bottom pb-3 mb-3 fw-bold">
-            <Link to='/admin' className="text-decoration-none" style={{'cursor': 'pointer'}}>Ecommerce</Link>
+            <Link to='/admin' className="text-decoration-none" style={{'cursor': 'pointer'}}>IndiaMart</Link>
           </h4>
 
           {/* Navigation Links */}
@@ -99,12 +99,22 @@ const Sidebar = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/admin/categories"
+                  to="/admin/orders"
                   className={({ isActive }) =>
                     `nav-link ${isActive ? "active" : "link-dark"}`
                   }
                 >
-                  Categories
+                  Orders
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink
+                  to="/admin/payments"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive ? "active" : "link-dark"}`
+                  }
+                >
+                  Payments
                 </NavLink>
               </li>
             </ul>

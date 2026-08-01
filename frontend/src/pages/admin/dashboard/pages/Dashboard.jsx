@@ -1,59 +1,145 @@
-import { FiUsers , FiDollarSign } from 'react-icons/fi';
+import { useEffect, useState } from "react";
+import {
+  FiUsers,
+  FiDollarSign,
+  FiArrowRight,
+  FiTrendingUp,
+} from "react-icons/fi";
 import { AiTwotoneShop } from "react-icons/ai";
 import { GiCardboardBoxClosed } from "react-icons/gi";
-import StatCard from '../components/StatCard';
-import RevenueGraph from '../components/RevenueGraph';
-import OrdersSummaryGraph from '../components/OrdersSummaryGraph';
+import RevenueGraph from "../components/RevenueGraph";
+import { fetchRevenueAndOrderAndGraphData } from "../../../../apis/services/order-service";
+import { Link } from "react-router";
 
-const statsData = [
-    { id: 1, title: 'Monthly Revenue', value: '₹ 3156', icon: FiDollarSign },
-    { id: 2, title: 'Monthly Orders', value: '62', icon: GiCardboardBoxClosed },
-    { id: 3, title: 'Customers', value: '10', icon: FiUsers },
-    { id: 4, title: 'Vendors', value: '4', icon: AiTwotoneShop },
-];
+const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const Dashboard = () => {
+  4;
+  const [weeklyRevenue, setWeeklyRevenue] = useState(0);
+  const [weeklyOrders, setWeeklyOrders] = useState(0);
+  const [totalCustomers, setTotalCustomers] = useState(0);
+  const [totalVendors, setTotalVendors] = useState(0);
+  const [weeklySales, setWeeklySales] = useState([]);
+
+  const formatWeeklySales = (sales) => {
+    const salesMap = new Map(
+      sales.map((item) => [item.day.substring(0, 3), item.income]),
+    );
+
+    return daysOfWeek.map((day) => ({
+      day,
+      income: salesMap.get(day) || 0,
+    }));
+  };
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      try {
+        const data = await fetchRevenueAndOrderAndGraphData();
+        setWeeklyRevenue(data.weeklyRevenue);
+        setWeeklyOrders(data.weeklyOrders);
+        // TODO : also fetch and set customer and vendor data
+        setWeeklySales(formatWeeklySales(data.weeklySales));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboardData();
+  }, []);
+
   return (
-    <div className='container-fluid py-3 py-md-4'>
-      <h3 className='lh-1 fw-bold'>Admin Dashboard</h3>
-      <p className='text-muted mb-4'>Monitor key metrics and manage platform efficiently</p>
+    <div className="container-fluid py-3 py-md-4">
+      <h3 className="lh-1 fw-bold">Admin Dashboard</h3>
+      <p className="text-muted mb-4">
+        Monitor key metrics and manage platform efficiently
+      </p>
 
       {/* Stats Row */}
-      <div className='row g-3 mb-4'>
-        {statsData.map((stat) => (
-          <div key={stat.id} className='col-12 col-sm-6 col-xl-3'>
-            <StatCard 
-              title={stat.title} 
-              value={stat.value} 
-              icon={stat.icon} 
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Graphs */}
-      <div className='row g-3'>
-        {/* Graph 1 */}
-        <div className='col-12 col-lg-8'>
-          <div className='card shadow-sm border-0 rounded-4 h-100'>
-            <div className='card-body'>
-              <h5 className='card-title fw-bold mb-4'>Revenue Overview</h5>
-              <RevenueGraph />
+      <div className="row g-3 mb-4">
+        {/* Weekly Revenue */}
+        <div className="col-12 col-sm-6 col-xl-3">
+          <div className="card shadow-sm border-0 rounded-4 h-100">
+            <div className="card-body p-4">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <div className="d-flex align-items-center gap-2 text-muted fw-semibold">
+                  <FiDollarSign size={20} />
+                  <span>Weekly Revenue</span>
+                </div>
+                <Link to={"/admin/payments"}>
+                <FiArrowRight
+                  className="text-muted"
+                /></Link>
+              </div>
+              <h2 className="mb-0 fw-bold">{weeklyRevenue}</h2>
             </div>
           </div>
         </div>
 
-        {/* Graph 2 */}
-        <div className='col-12 col-lg-4'>
-          <div className='card shadow-sm border-0 rounded-4 h-100'>
-            <div className='card-body'>
-              <h5 className='card-title fw-bold mb-4'>Orders Summary</h5>
-              <OrdersSummaryGraph />
+        {/* Weekly Orders */}
+        <div className="col-12 col-sm-6 col-xl-3">
+          <div className="card shadow-sm border-0 rounded-4 h-100">
+            <div className="card-body p-4">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <div className="d-flex align-items-center gap-2 text-muted fw-semibold">
+                  <GiCardboardBoxClosed size={20} />
+                  <span>Weekly Orders</span>
+                </div>
+                <Link to={"/admin/orders"}>
+                  <FiArrowRight className="text-muted" />
+                </Link>
+              </div>
+              <h2 className="mb-0 fw-bold">{weeklyOrders}</h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Total Customers */}
+        <div className="col-12 col-sm-6 col-xl-3">
+          <div className="card shadow-sm border-0 rounded-4 h-100">
+            <div className="card-body p-4">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <div className="d-flex align-items-center gap-2 text-muted fw-semibold">
+                  <FiUsers size={20} />
+                  <span>Customers</span>
+                </div>
+                <Link to={"/admin/customers"}>
+                  <FiArrowRight className="text-muted" />
+                </Link>
+              </div>
+              <h2 className="mb-0 fw-bold">{totalCustomers}</h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Total Vendors */}
+        <div className="col-12 col-sm-6 col-xl-3">
+          <div className="card shadow-sm border-0 rounded-4 h-100">
+            <div className="card-body p-4">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <div className="d-flex align-items-center gap-2 text-muted fw-semibold">
+                  <AiTwotoneShop size={20} />
+                  <span>Vendors</span>
+                </div>
+                <Link to={"/admin/vendors"}>
+                  <FiArrowRight className="text-muted" />
+                </Link>
+              </div>
+              <h2 className="mb-0 fw-bold">{totalVendors}</h2>
             </div>
           </div>
         </div>
       </div>
-      
+
+      {/* Graph */}
+      <div className="card shadow-sm border-0 rounded-4 h-100">
+        <div className="card-body">
+          <h5 className="card-title fw-bold mb-4">Revenue Overview</h5>
+          <RevenueGraph graphData={weeklySales} />
+        </div>
+      </div>
     </div>
   );
 };
