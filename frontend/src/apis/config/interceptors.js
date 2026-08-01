@@ -1,5 +1,5 @@
 import api from "./api";
-import { refreshAccessToken } from "./authService";
+import { refreshAccessToken } from "./authservice";
 import { toast } from "react-toastify";
 
 api.interceptors.request.use(
