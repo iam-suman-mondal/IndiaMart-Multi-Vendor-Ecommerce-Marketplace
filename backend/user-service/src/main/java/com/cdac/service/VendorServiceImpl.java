@@ -153,4 +153,9 @@ public class VendorServiceImpl implements VendorService {
 
         return new ApiResponse("success", "Vendor deleted successfully");
     }
+
+	@Override
+	public Long getVendorCount() {
+		return vendorRepo.count();
+	}
 }
