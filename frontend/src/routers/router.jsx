@@ -8,10 +8,10 @@ import VendorLayout from "../layouts/VendorLayout";
 import AdminLayout from "../layouts/AdminLayout";
 
 // Pages
-import CustomerLogin from '../pages/auth/CustomerLogin'
+import Login from '../pages/auth/Login'
 import VendorSignup from '../pages/auth/VendorSignup'
-import VendorLogin from "../pages/auth/VendorLogin"
-import AdminLogin from "../pages/auth/AdminLogin"
+
+// import AdminLogin from "../pages/auth/AdminLogin"
 import CustomerSignup from '../pages/auth/CustmerSignup'
 import ProductDetails from "../pages/public/public_home/components/ProductDetails"
 import CustomerProfile from '../pages/customer/profile/Profile'
@@ -33,6 +33,10 @@ import AdminOrders from '../pages/admin/orders/pages/Orders'
 import AdminPayments from '../pages/admin/payments/pages/Payments'
 import PublicHome from "../pages/public/public_home/pages/Home_page";
 import CategoryPage from "../pages/public/public_home/pages/Category_page";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import VerifySignup from "../pages/auth/VerifySignup";
+import ResetPassword from "../pages/auth/ResetPassword";
+import VendorVerifySignup from "../pages/auth/VendorVerifySignup";
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -62,23 +66,40 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "customer/login",
-        element: <CustomerLogin />,
+        element: <Login />,
       },
       {
         path: "customer/signup",
         element: <CustomerSignup />,
       },
       {
+    path:"customer/verifysignup",
+      element:<VerifySignup/>
+      },
+      {
+        path:"forgotPassword",
+        element:<ForgotPassword/>
+      },
+      {
+        path:"resetPassword",
+        element:<ResetPassword/>
+      }
+      ,
+      {
         path:"vendor/login",
-        element:<VendorLogin/>,
+        element:<Login/>,
       },
        {
         path:"vendor/signup",
         element:<VendorSignup/>,
       },
+      {
+    path:"vendor/verifysignup",
+      element:<VendorVerifySignup/>
+      },
        {
         path:"admin/login",
-        element:<AdminLogin />,
+        element:<Login />,
       },
       
     ],
