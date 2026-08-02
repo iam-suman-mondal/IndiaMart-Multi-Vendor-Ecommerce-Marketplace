@@ -20,3 +20,26 @@
 
   --color-footer: #1F1F1F;
 }
+
+
+.form-control.bg-dark::placeholder {
+    color: #bfc5ca !important;
+    opacity: 1 !important;
+}
+.form-control {
+    background: #3b3448 !important;
+    color: white !important;
+    border: 1px solid #555 !important;
+}
+
+.form-control::placeholder {
+    color: #adb5bd !important;
+    opacity: 1;
+}
+
+.form-control:focus {
+    background: #3b3448 !important;
+    color: white !important;
+    border-color: #8b5cf6 !important;
+    box-shadow: 0 0 0 .2rem rgba(139, 92, 246, 0.25);
+}
