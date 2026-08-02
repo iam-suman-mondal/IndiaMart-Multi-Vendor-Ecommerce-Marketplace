@@ -1,54 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
+import { getVendorProfile, updateVendorProfile } from "../../../apis/services/user-service";
 import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    firstName: 'Rahul',
-    lastName: '',
-    email: 'rahul@institute.com',
-    password: '••••••••',
-    address: 'Main Institute Street, Campus Area',
-    vendorId: 'VND-2026-96469',
-    businessName: 'Apex Tech Solutions',
-    gstNumber: '27AAAAA1111A1Z1',
-    aadhaarNo: '[Aadhaar Redacted]' // Kept secure as placeholder text
+    name: '',
+    email: '',
+    password: '',
+    phoneNo: '',
+    address: '',
+    companyName: '',
+    gstNo: '',
+    panNo: ''
   });
 
-  // 2. The critical handler that unlocks your inputs and lets you type
+  const [loading, setLoading] = useState(true);
+
+  // Fetch current data so the input boxes pre-populate with existing values
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await getVendorProfile();
+        setFormData({
+          name: data.name || '',
+          email: data.email || '',
+          password: '', // leave blank unless changing
+          phoneNo: data.phoneNo || '',
+          address: data.address || '',
+          companyName: data.companyName || '',
+          gstNo: data.gstNo || '',
+          panNo: data.panNo || ''
+        });
+      } catch (error) {
+        toast.error("Could not load current profile details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value // Updates the specific field being typed into
+      [name]: value
     }));
   };
 
-  const handleSave = () => {
-    console.log('Saved changes:', formData);
-    
-    // 3. Updated to use react-toastify syntax
-    toast.success('Profile changes saved successfully!', {
-      position: "top-right",
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+  const handleSave = async () => {
+    try {
+      // Prepare payload: if password is empty, omit it or send null so backend doesn't overwrite with blank
+      const payload = { ...formData };
+      if (!payload.password || payload.password.trim() === '') {
+        delete payload.password; // or set to null depending on your backend DTO rules
+      }
 
-    // Slightly delayed redirect so the user sees the toast
-    setTimeout(() => {
-      navigate('/vendor/profile');
-    }, 1800);
+      await updateVendorProfile(payload);
+
+      toast.success('Profile updated successfully!', {
+        position: "top-right",
+        autoClose: 1500,
+      });
+
+      setTimeout(() => {
+        navigate('/vendor/profile');
+      }, 1800);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to update profile.');
+    }
   };
+
+  if (loading) {
+    return <div className="text-center py-5 fw-bold">Loading form...</div>;
+  }
 
   return (
     <div className="container-fluid py-4 bg-light min-vh-100">
-      {/* 4. react-toastify container required to render the notification */}
       <ToastContainer />
 
       <div className="row justify-content-center">
@@ -57,47 +90,29 @@ const UpdateProfile = () => {
           <div className="card border-0 shadow-sm p-4 p-md-5 bg-white">
             <div className="pb-4 mb-4 border-bottom">
               <h2 className="fw-bold text-dark mb-1">Modify Profile Details</h2>
-              <p className="text-muted m-0 small">Edit your information below. Fields marked with lock icons are permanent.</p>
+              <p className="text-muted m-0 small">Edit your information below and save changes.</p>
             </div>
 
             <div className="row g-4">
-              {/* Vendor ID - Locked out */}
-              <div className="col-12">
-                <label className="form-label fw-semibold text-danger small">Vendor ID (Unmodifiable)</label>
-                <div className="input-group">
-                  <span className="input-group-text bg-secondary-subtle border-secondary-subtle text-secondary">
-                    <i className="bi bi-lock-fill"></i>
-                  </span>
-                  <input 
-                    type="text" 
-                    className="form-control bg-secondary-subtle text-secondary border-secondary-subtle fw-bold" 
-                    value={formData.vendorId} 
-                    disabled 
-                  />
-                </div>
-              </div>
-
-              {/* All input fields below now have matching 'name' attributes and 'onChange' fired */}
               <div className="col-md-6">
-                <label className="form-label fw-semibold text-secondary small">First Name</label>
+                <label className="form-label fw-semibold text-secondary small">Full Name</label>
                 <input 
                   type="text" 
                   className="form-control" 
-                  name="firstName" 
-                  value={formData.firstName} 
+                  name="name" 
+                  value={formData.name} 
                   onChange={handleChange} 
                 />
               </div>
 
               <div className="col-md-6">
-                <label className="form-label fw-semibold text-secondary small">Last Name</label>
+                <label className="form-label fw-semibold text-secondary small">Phone Number</label>
                 <input 
                   type="text" 
                   className="form-control" 
-                  name="lastName" 
-                  value={formData.lastName} 
+                  name="phoneNo" 
+                  value={formData.phoneNo} 
                   onChange={handleChange} 
-                  placeholder="Enter last name" 
                 />
               </div>
 
@@ -118,6 +133,7 @@ const UpdateProfile = () => {
                   type="password" 
                   className="form-control" 
                   name="password" 
+                  placeholder="Leave blank to keep old password" 
                   value={formData.password} 
                   onChange={handleChange} 
                 />
@@ -128,8 +144,8 @@ const UpdateProfile = () => {
                 <input 
                   type="text" 
                   className="form-control fw-semibold" 
-                  name="businessName" 
-                  value={formData.businessName} 
+                  name="companyName" 
+                  value={formData.companyName} 
                   onChange={handleChange} 
                 />
               </div>
@@ -139,19 +155,19 @@ const UpdateProfile = () => {
                 <input 
                   type="text" 
                   className="form-control font-monospace" 
-                  name="gstNumber" 
-                  value={formData.gstNumber} 
+                  name="gstNo" 
+                  value={formData.gstNo} 
                   onChange={handleChange} 
                 />
               </div>
 
               <div className="col-md-6">
-                <label className="form-label fw-semibold text-secondary small">Aadhaar ID Number</label>
+                <label className="form-label fw-semibold text-secondary small">PAN Number</label>
                 <input 
                   type="text" 
                   className="form-control" 
-                  name="aadhaarNo" 
-                  value={formData.aadhaarNo} 
+                  name="panNo" 
+                  value={formData.panNo} 
                   onChange={handleChange} 
                 />
               </div>
