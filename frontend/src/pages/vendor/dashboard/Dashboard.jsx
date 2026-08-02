@@ -1,14 +1,50 @@
-import React from 'react'
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
+import React, { useState, useEffect } from 'react';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import api from '../../../apis/config/interceptors';
 
-const salesData = [
-  { day: 'Mon', Sales: 1200 },
-  { day: 'Tue', Sales: 2100 },
-  { day: 'Wed', Sales: 1500 },
-  { day: 'Thu', Sales: 3100 },
-  { day: 'Fri', Sales: 4250 }, // Matches the total sales metric card!
-];
 const Dashboard = () => {
+  const [analytics, setAnalytics] = useState({
+    weeklyRevenue: 0,
+    weeklyOrders: 0,
+    weeklySales: []
+  });
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        // Fetch analytics and vendor orders in parallel
+        const [analyticsRes, ordersRes] = await Promise.all([
+          api.get('/api/orders/vendor/analytics'),
+          api.get('/api/orders/vendor')
+        ]);
+
+        setAnalytics(analyticsRes.data);
+
+        // Sort orders descending to get the latest ones, then take the top 3
+        const ordersData = Array.isArray(ordersRes.data) ? ordersRes.data : [];
+        const sortedOrders = ordersData.sort((a, b) => b.id - a.id).slice(0, 3);
+        setRecentOrders(sortedOrders);
+
+      } catch (error) {
+        console.error("Failed to load dashboard data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  // Transform backend weeklySales array into Recharts-friendly format
+  const salesData = analytics.weeklySales && analytics.weeklySales.length > 0
+    ? analytics.weeklySales.map(item => ({
+        day: item.day ? item.day.slice(0, 3) : '',
+        Sales: item.income
+      }))
+    : [{ day: 'Mon', Sales: 0 }];
+
   return (
     <div className="container-fluid pt-4">
  
@@ -25,7 +61,9 @@ const Dashboard = () => {
           <div className="p-3 border rounded bg-white shadow-sm d-flex justify-content-between align-items-center">
             <div>
               <h6 className="text-muted small text-uppercase fw-semibold mb-1">Total Sales</h6>
-              <h3 className="fw-bold mb-0">₹4,250.00</h3>
+              <h3 className="fw-bold mb-0">
+                ₹{loading ? '...' : analytics.weeklyRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </h3>
             </div>
             <div className="fs-3">💰</div>
           </div>
@@ -36,7 +74,9 @@ const Dashboard = () => {
           <div className="p-3 border rounded bg-white shadow-sm d-flex justify-content-between align-items-center">
             <div>
               <h6 className="text-muted small text-uppercase fw-semibold mb-1">Total Orders</h6>
-              <h3 className="fw-bold mb-0">32</h3>
+              <h3 className="fw-bold mb-0">
+                {loading ? '...' : analytics.weeklyOrders}
+              </h3>
             </div>
             <div className="fs-3">📦</div>
           </div>
@@ -54,7 +94,6 @@ const Dashboard = () => {
         </div>
       </div> {/* Closes blocks row */}
    
-
  
       {/* VISUAL SALES PERFORMANCE CHART */}
       <div className="mt-4">
@@ -91,7 +130,6 @@ const Dashboard = () => {
       {/* chart part ends here */}
 
       {/* RECENT ORDERS TABLE CARD*/}
-     
       <div className="mt-4">
         <div className="p-4 border rounded bg-white shadow-sm">
           
@@ -108,37 +146,47 @@ const Dashboard = () => {
               <thead className="table-light text-secondary small">
                 <tr>
                   <th>Order ID</th>
-                  <th>Customer</th>
-                  <th>Date</th>
-                  <th>Total</th>
+                  <th>Product(s)</th>
+                  <th>Subtotal</th>
                   <th>Status</th>
                 </tr>
               </thead>
               
               {/* Table Body Content Rows */}
               <tbody className="small">
-                <tr>
-                  <td className="fw-semibold">#ORD-96469</td>
-                  <td>Prathmesh Rayke</td>
-                  <td>2026-06-05</td>
-                  <td>₹120.00</td>
-                  <td>
-                    <span className="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
-                      Delivered
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="fw-semibold">#ORD-96470</td>
-                  <td>Suman Mondal</td>
-                  <td>2026-06-06</td>
-                  <td>₹45.50</td>
-                  <td>
-                    <span className="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1">
-                      Pending
-                    </span>
-                  </td>
-                </tr>
+                {loading ? (
+                  <tr>
+                    <td colSpan="4" className="text-center py-3 text-muted">Loading recent orders...</td>
+                  </tr>
+                ) : recentOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" className="text-center py-3 text-muted">No recent orders found.</td>
+                  </tr>
+                ) : (
+                  recentOrders.map((order) => {
+                    const statusClass = 
+                      order.status === 'DELIVERED' ? 'bg-success-subtle text-success border-success-subtle' :
+                      order.status === 'PENDING' ? 'bg-warning-subtle text-warning-emphasis border-warning-subtle' :
+                      'bg-secondary-subtle text-secondary border-secondary-subtle';
+
+                    return (
+                      <tr key={order.id}>
+                        <td className="fw-semibold">#ORD-{order.id}</td>
+                        <td>
+                          {order.items && order.items.length > 0 
+                            ? order.items.map(item => item.productName).join(', ') 
+                            : 'N/A'}
+                        </td>
+                        <td>₹{Number(order.subtotal).toFixed(2)}</td>
+                        <td>
+                          <span className={`badge border px-2 py-1 ${statusClass}`}>
+                            {order.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
 
             </table>
@@ -149,7 +197,7 @@ const Dashboard = () => {
       {/* recent table part ends here  */}
 
     </div> // Closes the main container-fluid
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
