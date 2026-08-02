@@ -29,5 +29,7 @@ public interface CustomerService {
 
 	CustomerDetailsDto getCustomer(Long customerId);
 
+	Long getCustomerCount();
+
 	
 }
