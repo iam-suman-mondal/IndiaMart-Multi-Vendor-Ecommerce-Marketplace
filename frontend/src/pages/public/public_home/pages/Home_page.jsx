@@ -8,7 +8,7 @@ export default function PublicHome() {
     <>
       <HomeBanner/>
       <BestSellers/>
-      <TopTrending/>
+      {/* <TopTrending/> */}
     </>
   );
 }

@@ -11,7 +11,7 @@ import api from "../config/interceptors";
 // }
 //
 export const createOrder = async (payload) => {
-  const response = await api.post(`/api/orders`);
+  const response = await api.post(`/api/orders`, payload);
   return response.data;
 };
 

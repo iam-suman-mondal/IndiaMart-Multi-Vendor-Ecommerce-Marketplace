@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import ProductCard from "../../shared/components/ProductCard";
-import dummyimg from "../images/dummy_image.png";
+import dummyimg from "../images/dummy_image.jpeg";
 
 const productArray =   [
   {

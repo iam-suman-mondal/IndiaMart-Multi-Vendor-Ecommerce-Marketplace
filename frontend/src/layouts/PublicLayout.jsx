@@ -10,7 +10,7 @@ function PublicLayout() {
     <>
       <Header />
       <CategoryTab/>
-      <main className="container">
+      <main className="container-fluid px-3">
         <Outlet />
       </main>
 
