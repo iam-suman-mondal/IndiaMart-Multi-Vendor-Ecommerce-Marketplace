@@ -183,6 +183,14 @@ export const getAllVendorsByAdmin = async () => {
 };
 
 /**
+ * Get Customer and Vendor Count
+ */
+export const getAllCustomerAndVendorCount = async () => {
+  const response = await api.get(`/admin/dashboard/analytics?param=_temp`);
+  return response.data;
+};
+
+/**
  * Updates vendor details via admin control[cite: 2].
  * @param {Number} id - Vendor ID[cite: 2]
  * @param {Object} payload - Vendor DTO data[cite: 2]
