@@ -16,46 +16,48 @@ api.interceptors.request.use(
 );
 
 // api.interceptors.response.use(
-    // (response) => response,
 
-    // async (error) => {
-    //     const originalRequest = error.config;
+//     (response) => response,
 
-    //     if (
-    //         error.response?.status === 401 &&
-    //         !originalRequest._retry
-    //     ) {
-    //         originalRequest._retry = true;
+//     async (error) => {
+//         const originalRequest = error.config;
 
-    //         try {
-    //             const accessToken = await refreshAccessToken();
+//         if (
+//             error.response?.status === 401 &&
+//             !originalRequest._retry
+//         ) {
+//             originalRequest._retry = true;
 
-    //             originalRequest.headers.Authorization =
-    //                 `Bearer ${accessToken}`;
+//             try {
+//                 const accessToken = await refreshAccessToken();
 
-    //             return api(originalRequest);
-    //         } catch (refreshError) {
-    //             localStorage.removeItem("token");
-    //             localStorage.removeItem("refreshToken");
+//                 originalRequest.headers.Authorization =
+//                     `Bearer ${accessToken}`;
 
-    //             toast.error(
-    //                 "Session expired. Please log in again."
-    //             );
+//                 return api(originalRequest);
+//             } catch (refreshError) {
+//                 localStorage.removeItem("token");
+//                 localStorage.removeItem("refreshToken");
 
-    //             window.location.href = "/auth/login";
+//                 toast.error(
+//                     "Session expired. Please log in again."
+//                 );
 
-    //             return Promise.reject(refreshError);
-    //         }
-    //     }
+//                 window.location.href = "/auth/login";
 
-    //     const message =
-    //         error.response?.data?.message ||
-    //         "Something went wrong.";
+//                 return Promise.reject(refreshError);
+//             }
+//         }
 
-    //     toast.error(message);
+//         const message =
+//             error.response?.data?.message ||
+//             "Something went wrong.";
 
-    //     return Promise.reject(error);
-    // }
+//         toast.error(message);
+
+//         return Promise.reject(error);
+//     }
+
 // );
 
 export default api;
