@@ -37,6 +37,12 @@ import ForgotPassword from "../pages/auth/ForgotPassword";
 import VerifySignup from "../pages/auth/VerifySignup";
 import ResetPassword from "../pages/auth/ResetPassword";
 import VendorVerifySignup from "../pages/auth/VendorVerifySignup";
+import SearchResults from "../pages/public/public_home/pages/search_result";
+import CartPage from "../pages/customer/cart/Cart"
+import Checkout from "../pages/customer/PaymentPage/Checkout";
+import PaymentInProcess from "../pages/customer/PaymentStatusPage/PaymentInProcess";
+import SuccessPaymentPage from "../pages/customer/PaymentStatusPage/SuccessPaymentPage";
+import FailedPaymentPage from "../pages/customer/PaymentStatusPage/FailedPaymentPage";
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -56,6 +62,15 @@ export const router = createBrowserRouter([
         path: "product/:id",
         element: <ProductDetails />,
       },
+      {
+      path: "search",
+      element: <SearchResults />,
+      },
+      {
+        path : "cart",
+        element: <CartPage/>,
+      }
+       
     ],
   },
 
@@ -118,7 +133,23 @@ export const router = createBrowserRouter([
         path: "orders",
         element: <CustomerOrders />,
       },
-       
+      {
+        path: "order_summury",
+        element: <Checkout/>
+      },
+       {
+        path: "process-payment",
+        element: <PaymentInProcess/>
+      }
+      ,
+       {
+        path: "success-payment",
+        element: <SuccessPaymentPage/>
+      }
+      , {
+        path: "failed-payment",
+        element: <FailedPaymentPage/>
+      }
     ],
   },
 

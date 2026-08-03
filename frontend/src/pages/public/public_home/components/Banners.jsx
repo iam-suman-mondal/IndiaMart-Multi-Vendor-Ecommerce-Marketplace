@@ -1,69 +1,92 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/autoplay";
 
-import banner1 from "../images/tempBanner.jpg";
-import banner2 from "../images/tempBanner.jpg";
-import banner3 from "../images/tempBanner.jpg";
+import banner1 from "../images/HomeAppliances.jpeg";
+import banner2 from "../images/MobileLaptop.jpeg";
+import banner3 from "../images/Perfume.jpeg";
 
 // Demo Data
 const banners = [
   {
     image: banner1,
-    title: "Electronics Sale",
-
+    title: "HomeAppliances Sale",
   },
   {
     image: banner2,
-    title: "Fashion Deals",
-
+    title: "MobileLaptop Deals",
   },
   {
     image: banner3,
-    title: "Home Essentials",
-   
+    title: "Perfume Essentials",
   },
 ];
 
-// Reusable Component
-function BannerSlider({ banners, height = "250px" }) {
+// Reusable Banner Slider Component
+function BannerSlider({ banners }) {
   return (
-    <Swiper
-      modules={[Navigation, Autoplay]}
-      navigation
-      loop={true}
-      autoplay={{
-        delay: 3000,
-        disableOnInteraction: false,
-      }}
-    >
-      {banners.map((banner, index) => (
-        <SwiperSlide key={index}>
+    <>
+      <style>{`
+        /* Reduced Responsive Heights */
+        .responsive-banner-img {
+          width: 100%;
+          height: 180px; /* Mobile height */
+          object-fit: cover;
+          display: block;
+        }
+
+        @media (min-width: 576px) {
+          .responsive-banner-img {
+            height: 220px; /* Small tablets */
+          }
+        }
+
+        @media (min-width: 768px) {
+          .responsive-banner-img {
+            height: 260px; /* Tablets */
+          }
+        }
+
+        @media (min-width: 992px) {
+          .responsive-banner-img {
+            height: 350px; /* Desktop */
+          }
+        }
+      `}</style>
+
+      <Swiper
+        modules={[Autoplay]}
+        loop={true}
+        allowTouchMove={true}
+        grabCursor={true}
+        autoplay={{
+          delay: 3500,
+          disableOnInteraction: false,
+        }}
+        className="home-banner-swiper overflow-hidden shadow-sm"
+      >
+        {banners.map((banner, index) => (
+          <SwiperSlide key={index}>
             <img
               src={banner.image}
               alt={banner.title}
-              className="w-100 mt-3"
-              style={{
-                height: 300,
-                objectFit: "cover",
-                display:"block",
-              }}
+              className="responsive-banner-img"
+              loading={index === 0 ? "eager" : "lazy"}
             />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </>
   );
 }
 
 export default function HomeBanner() {
   return (
-    <div className="container-fluid p-0 m-0">
-      <BannerSlider banners={banners} height="300px" />
+    <div className="container-fluid p-0 my-2">
+      <BannerSlider banners={banners} />
     </div>
   );
-
 }
