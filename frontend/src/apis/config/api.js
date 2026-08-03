@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://bulb-delivery-sanitizer.ngrok-free.dev",
+
+  baseURL: "http://localhost:9090",
+
   headers: {
     "ngrok-skip-browser-warning": "true",
   },

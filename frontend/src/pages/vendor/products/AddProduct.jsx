@@ -1,75 +1,148 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
+import { addProduct, getProductById, updateProduct, getPresignedUploadUrl } from '../../../apis/services/product-service';
 
-// Mock inventory data so the file can search and find existing entries
-const productsInventory = [
-  { id: 'PROD-101', name: 'Wireless Bluetooth Earbuds', price: '₹3,999', stock: 2, image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80' },
-  { id: 'PROD-102', name: 'Ergonomic Office Chair', price: '₹14,500', stock: 15, image: 'https://images.unsplash.com/photo-1505797149-43b0069ec26b?auto=format&fit=crop&w=600&q=80' },
-  { id: 'PROD-103', name: 'Stainless Steel Water Bottle', price: '₹1,250', stock: 3, image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80' },
-  { id: 'PROD-104', name: 'Mechanical Gaming Keyboard', price: '₹6,499', stock: 22, image: 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=600&q=80' },
-  { id: 'PROD-105', name: 'Leather Passport Wallet', price: '₹2,100', stock: 18, image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=600&q=80' },
-  { id: 'PROD-106', name: '4K UltraHD Action Camera', price: '₹24,999', stock: 1, image: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80' },     
-  { id: 'PROD-107', name: 'Smart Fitness Watch v2', price: '₹9,999', stock: 4, image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=600&q=80' },     
-  { id: 'PROD-108', name: 'RGB Wireless Gaming Mouse', price: '₹3,450', stock: 45, image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80' },
-  { id: 'PROD-109', name: 'Premium Arabica Coffee Beans', price: '₹950', stock: 60, image: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=600&q=80' },
-  { id: 'PROD-110', name: 'Portable Fast Charger Bank', price: '₹2,800', stock: 3, image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80' }
-];
-
-const AddProduct = ({ productId }) => {
+const AddProduct = () => {
   const navigate = useNavigate();
+  const { id: productId } = useParams();
 
-  // Controlled component input state fields
+  // Form states
   const [productName, setProductName] = useState('');
+  const [productDescription, setProductDescription] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productStock, setProductStock] = useState('');
-  const [productImage, setProductImage] = useState('');
+  const [productBrand, setProductBrand] = useState('');
+  const [productCategory, setProductCategory] = useState('ELECTRONICS');
+  
+  // Image handling states
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Look up the matching data item out of your products inventory array on load
+  // Fetch product details if editing
   useEffect(() => {
     if (productId) {
-      const match = productsInventory.find((item) => item.id === productId);
-      if (match) {
-        setProductName(match.name);
-        setProductPrice(match.price.replace('₹', '')); // Removes symbol for editing simplicity
-        setProductStock(match.stock);
-        setProductImage(match.image);
-      }
+      const fetchProductDetails = async () => {
+        try {
+          const data = await getProductById(productId);
+          setProductName(data.name || '');
+          setProductDescription(data.description || '');
+          setProductPrice(data.price || '');
+          setProductStock(data.availableQuantity ?? data.quantity ?? '');
+          setImageUrl(data.image || '');
+          setPreviewUrl(data.image || '');
+          setProductBrand(data.brand || '');
+          setProductCategory(data.category || 'ELECTRONICS');
+        } catch (error) {
+          console.error("Failed to fetch product details", error);
+          toast.error("Could not load product details for editing.");
+        }
+      };
+      fetchProductDetails();
     }
   }, [productId]);
-   
-  const handleAdd = () => {
-    if (!productName || !productPrice || !productStock || !productImage) {
-      toast.error("Please fill the all fields ");
+
+  // Handle local file selection and type validation
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only JPG, JPEG, and PNG image formats are allowed.");
       return;
     }
 
-    if (productId) {
-      toast.success("Product Updated Successfully");
-    } else {
-      toast.success("Product Added Successfully");
+    setSelectedFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  // Upload image handler: hits pre-signed URL mapping and uploads binary to S3
+  const handleImageUpload = async () => {
+    if (!selectedFile) {
+      toast.error("Please select an image file first.");
+      return;
     }
 
-    // Crucial: Gives the toast banner 1.5 seconds to show before page unmounts
-    setTimeout(() => {
-      navigate('/vendor/products');
-    }, 1500);
+    try {
+      setUploadingImage(true);
+      const fileExtension = selectedFile.name.split('.').pop();
+      
+      const presignedData = await getPresignedUploadUrl(fileExtension, selectedFile.type);
+      
+      const uploadUrl = presignedData.uploadUrl || presignedData.url;
+      const publicFileUrl = presignedData.fileUrl || presignedData.imageUrl || selectedFile.name;
+
+      if (uploadUrl) {
+        const s3Response = await fetch(uploadUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': selectedFile.type,
+          },
+          body: selectedFile,
+        });
+
+        if (!s3Response.ok) {
+          throw new Error("Failed to upload file to S3 storage.");
+        }
+      }
+
+      setImageUrl(publicFileUrl);
+      toast.success("Image Uploaded Successfully!");
+    } catch (error) {
+      console.error("Image upload failed", error);
+      toast.error("Failed to upload image to S3.");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+   
+  const handleSave = async () => {
+    if (!productName || !productPrice || !productStock || !imageUrl || !productBrand || !productDescription) {
+      toast.error("Please fill in all fields and ensure the image is uploaded.");
+      return;
+    }
+
+    const payload = {
+      name: productName,
+      description: productDescription,
+      price: parseFloat(productPrice),
+      image: imageUrl,
+      brand: productBrand,
+      availableQuantity: parseInt(productStock, 10),
+      category: productCategory,
+    };
+
+    try {
+      setLoading(true);
+      if (productId) {
+        await updateProduct({ ...payload, productId: Number(productId) });
+        toast.success("Product Updated Successfully");
+      } else {
+        await addProduct(payload);
+        toast.success("Product Added Successfully");
+      }
+
+      setTimeout(() => {
+        navigate('/vendor/products');
+      }, 1500);
+    } catch (error) {
+      console.error("Operation failed", error);
+      toast.error(error.response?.data?.message || "Failed to save product.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="container-fluid pt-5 px-2 px-md-4 bg-light min-vh-100 d-flex flex-column align-items-center">
       <ToastContainer />
       
-      {/* Centering Wrapper for the Header Banner */}
       <div className="w-100" style={{ maxWidth: '750px' }}>
-        {/* HEADER BANNER */}
         <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center mb-4 gap-2">
-          {/* <button 
-            className="btn btn-sm btn-outline-secondary px-3 fw-bold rounded-2 shadow-sm" 
-            onClick={() => navigate('/vendor/products')}
-          >
-            ← Back
-          </button> */}
           <div>
             <h2 className="fw-bold text-dark mb-0 fs-2">
               {productId ? "Modify Product Details" : "Add New Product"}
@@ -81,78 +154,141 @@ const AddProduct = ({ productId }) => {
         </div>
       </div>
 
-      <div className="card border-0 shadow-sm rounded-3 p-4 p-md-5 bg-white w-100" style={{ maxWidth: '750px' }}>
+      <div className="card border-0 shadow-sm rounded-3 p-4 p-md-5 bg-white w-100 mb-5" style={{ maxWidth: '750px' }}>
         
-        {/* INPUT 1: Product Title */}
+        {/* INPUT: Product Name */}
         <div className="mb-4">
           <label className="form-label fw-bold text-secondary small">Product Name</label>
           <input 
             type="text" 
             className="form-control form-control-sm rounded-2 py-2.5" 
-            placeholder="e.g., Wireless Bluetooth Earbuds"
+            placeholder="e.g., Realme 12 Pro Plus"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
           />
         </div>
 
-        {/* RESPONSIVE ROW for Price and Stock */}
+        {/* INPUT: Description */}
+        <div className="mb-4">
+          <label className="form-label fw-bold text-secondary small">Description</label>
+          <textarea 
+            className="form-control form-control-sm rounded-2 py-2.5" 
+            rows="3"
+            placeholder="Detailed product specifications..."
+            value={productDescription}
+            onChange={(e) => setProductDescription(e.target.value)}
+          />
+        </div>
+
+        {/* PRICE & STOCK */}
         <div className="row g-4 mb-4">
-          
-          {/* INPUT 2: Cost Value */}
           <div className="col-12 col-sm-6">
             <label className="form-label fw-bold text-secondary small">Price (₹)</label>
             <input 
-              type="text" 
+              type="number" 
               className="form-control form-control-sm rounded-2 py-2.5" 
-              placeholder="e.g., 3,999"
+              placeholder="e.g., 32000"
               value={productPrice}
               onChange={(e) => setProductPrice(e.target.value)}
             />
           </div>
 
-          {/* INPUT 3: Warehouse Quantity */}
           <div className="col-12 col-sm-6">
-            <label className="form-label fw-bold text-secondary small">Stock Units</label>
+            <label className="form-label fw-bold text-secondary small">Stock Units (Available Quantity)</label>
             <input 
               type="number" 
               className="form-control form-control-sm rounded-2 py-2.5" 
-              placeholder="e.g., 15"
+              placeholder="e.g., 1"
               value={productStock}
               onChange={(e) => setProductStock(e.target.value)}
             />
           </div>
         </div>
 
-        {/* INPUT 4: Internet Web Link */}
-        <div className="mb-5">
-          <label className="form-label fw-bold text-secondary small">Product Image URL Link</label>
-          <input 
-            type="url" 
-            className="form-control form-control-sm rounded-2 py-2.5" 
-            placeholder="https://images.unsplash.com/photo-..."
-            value={productImage}
-            onChange={(e) => setProductImage(e.target.value)}
-          />
-          <div className="form-text text-muted" style={{ fontSize: '0.75rem' }}>
-            Paste a public image web url string to generate the card thumbnail preview.
+        {/* BRAND & CATEGORY */}
+        <div className="row g-4 mb-4">
+          <div className="col-12 col-sm-6">
+            <label className="form-label fw-bold text-secondary small">Brand</label>
+            <input 
+              type="text" 
+              className="form-control form-control-sm rounded-2 py-2.5" 
+              placeholder="e.g., Realme"
+              value={productBrand}
+              onChange={(e) => setProductBrand(e.target.value)}
+            />
+          </div>
+
+          <div className="col-12 col-sm-6">
+            <label className="form-label fw-bold text-secondary small">Category</label>
+            <select 
+              className="form-select form-select-sm rounded-2 py-2.5"
+              value={productCategory}
+              onChange={(e) => setProductCategory(e.target.value)}
+            >
+              <option value="ELECTRONICS">ELECTRONICS</option>
+              <option value="HOME_APPLIANCES">HOME_APPLIANCES</option>
+              <option value="FASHION">FASHION</option>
+              <option value="GROCERY">GROCERY</option>
+              <option value="BOOKS">BOOKS</option>
+            </select>
           </div>
         </div>
 
-        {/* Stacked Action Buttons */}
+        {/* IMAGE FILE UPLOAD SECTION WITH UPDATE BUTTON */}
+        <div className="mb-5">
+          <label className="form-label fw-bold text-secondary small">Product Image (JPG, JPEG, PNG)</label>
+          <div className="input-group input-group-sm mb-2">
+            <input 
+              type="file" 
+              className="form-control rounded-2" 
+              accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+              onChange={handleFileChange}
+            />
+            <button 
+              type="button" 
+              className="btn btn-outline-primary fw-semibold px-3"
+              onClick={handleImageUpload}
+              disabled={uploadingImage || !selectedFile}
+            >
+              {uploadingImage ? 'Uploading...' : 'Upload Image'}
+            </button>
+          </div>
+          <div className="form-text text-muted" style={{ fontSize: '0.75rem' }}>
+            Select an image file and click 'Upload Image' to generate and save the S3 asset URL.
+          </div>
+
+          {/* Image Preview */}
+          {previewUrl && (
+            <div className="mt-3 p-2 border rounded bg-light d-inline-block">
+              <img 
+                src={previewUrl} 
+                alt="Preview Thumbnail" 
+                style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
+                className="rounded shadow-sm"
+              />
+              <p className="small text-muted mb-0 mt-1 text-truncate" style={{ maxWidth: '200px' }}>
+                {imageUrl ? `Saved URL: ${imageUrl}` : 'Pending Upload...'}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Action Buttons */}
         <div className="d-flex flex-column gap-2 mt-4">
           <button 
             type="button" 
             className={`btn w-100 py-2.5 fw-bold rounded-2 shadow-sm ${productId ? 'btn-success' : 'btn-primary'}`}
-            onClick={handleAdd}
+            onClick={handleSave}
+            disabled={loading}
           >
-            {productId ? 'Update Product' : 'Add Product'}
+            {loading ? 'Processing...' : productId ? 'Update Product' : 'Add Product'}
           </button>
           <button 
             type="button" 
             className="btn btn-outline-secondary w-100 py-2.5 rounded-2 fw-semibold"
             onClick={() => navigate('/vendor/products')}
           >
-             Cancel
+            Cancel
           </button>
         </div>
 

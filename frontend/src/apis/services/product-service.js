@@ -1,3 +1,5 @@
+import api from "../config/interceptors";
+
 // ======================= Product =======================
 
 // Add Product
