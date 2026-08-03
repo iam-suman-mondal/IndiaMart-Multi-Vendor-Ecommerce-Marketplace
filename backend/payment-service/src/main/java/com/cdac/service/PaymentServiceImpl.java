@@ -74,6 +74,7 @@ public class PaymentServiceImpl implements PaymentService {
 		customerDetails.setCustomerPhone(dto.getCustomerPhoneNo());
 
 		OrderMeta orderMeta = new OrderMeta();
+		orderMeta.setReturnUrl("http://localhost:5173/customer/process-payment?orderId=" + dto.getOrderId());
         orderMeta.setNotifyUrl(cashfreeProperties.getBackendUrl() + "/api/payments/webhook");
 		
         CreateOrderRequest request = new CreateOrderRequest();
