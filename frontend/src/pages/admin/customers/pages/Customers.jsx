@@ -1,77 +1,42 @@
-import { useState } from "react";
-
-const customerData = [
-  {
-    id: "1001",
-    name: "Aarav Patel",
-    email: "aarav.p@example.in",
-    phone: "+91 9876543210",
-    joinedOn: "12 Jan, 2024",
-    status: "Active",
-  },
-  {
-    id: "1002",
-    name: "Priya Sharma",
-    email: "priya.sharma@example.in",
-    phone: "+91 8765432109",
-    joinedOn: "15 Jan, 2024",
-    status: "Active",
-  },
-  {
-    id: "1003",
-    name: "Rahul Desai",
-    email: "r.desai99@example.in",
-    phone: "+91 7654321098",
-    joinedOn: "02 Feb, 2024",
-    status: "Suspended",
-  },
-  {
-    id: "1004",
-    name: "Neha Gupta",
-    email: "neha.g@example.in",
-    phone: "+91 9988776655",
-    joinedOn: "20 Feb, 2024",
-    status: "Active",
-  },
-  {
-    id: "1005",
-    name: "Vikram Singh",
-    email: "vikram.singh@example.in",
-    phone: "+91 8877665544",
-    joinedOn: "05 Mar, 2024",
-    status: "Suspended",
-  },
-  {
-    id: "1006",
-    name: "Ananya Iyer",
-    email: "ananya.iyer@example.in",
-    phone: "+91 9123456780",
-    joinedOn: "10 Mar, 2024",
-    status: "Active",
-  },
-];
+import { useState, useEffect } from "react";
+import { getAllCustomerDetails } from "../../../../apis/services/user-service";
 
 const Customers = () => {
+  const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const fetchAllCustomers = async () => {
+    const data = await getAllCustomerDetails();
+    setCustomers(data);
+  };
+
+  useEffect(() => {
+    fetchAllCustomers();
+  }, []);
+
   // Filter customers based on search input (Parameters: ID, name, email)
-  const filteredCustomers = customerData.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.id.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredCustomers = customers.filter((customer) => {
+  const name = customer.name?.toLowerCase() || "";
+  const email = customer.email?.toLowerCase() || "";
+  const id = String(customer.id || "").toLowerCase();
+
+  return (
+    name.includes(searchTerm.toLowerCase()) ||
+    email.includes(searchTerm.toLowerCase()) ||
+    id.includes(searchTerm.toLowerCase())
   );
+});
 
   // function to render status badges
   const getStatusBadge = (status) => {
     switch (status) {
-      case "Active":
+      case true:
         return (
           <span className="badge bg-success bg-opacity-25 text-success px-2 py-1 rounded-pill">
             Active
           </span>
         );
-      case "Suspended":
+      case false:
         return (
           <span className="badge bg-danger bg-opacity-25 text-danger px-2 py-1 rounded-pill">
             Suspended
@@ -141,15 +106,21 @@ const Customers = () => {
                       <td className="fw-medium">{customer.id}</td>
                       <td className="fw-bold text-dark">{customer.name}</td>
                       <td className="text-muted">{customer.email}</td>
-                      <td>{customer.phone}</td>
-                      <td>{customer.joinedOn}</td>
-                      <td>{getStatusBadge(customer.status)}</td>
+                      <td>{customer.phoneNo}</td>
+                      <td>{customer.createdOn}</td>
+                      <td>{getStatusBadge(customer.isActive)}</td>
                       <td>
                         {/* Action Buttons */}
                         <div className="d-flex gap-2">
-                          <button className="btn btn-sm btn-outline-primary">
-                            Suspend
-                          </button>
+                          {customer.isActive ? (
+                            <button className="btn btn-sm btn-outline-danger">
+                              Ban
+                            </button>
+                          ) : (
+                            <button className="btn btn-sm btn-outline-primary">
+                              Unban
+                            </button>
+                          )}
                           <button className="btn btn-sm btn-outline-danger">
                             Delete
                           </button>

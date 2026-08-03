@@ -9,6 +9,7 @@ import { AiTwotoneShop } from "react-icons/ai";
 import { GiCardboardBoxClosed } from "react-icons/gi";
 import RevenueGraph from "../components/RevenueGraph";
 import { fetchRevenueAndOrderAndGraphData } from "../../../../apis/services/order-service";
+import { getAllCustomerAndVendorCount } from "../../../../apis/services/user-service";
 import { Link } from "react-router";
 
 const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -20,6 +21,7 @@ const Dashboard = () => {
   const [totalCustomers, setTotalCustomers] = useState(0);
   const [totalVendors, setTotalVendors] = useState(0);
   const [weeklySales, setWeeklySales] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const formatWeeklySales = (sales) => {
     const salesMap = new Map(
@@ -32,16 +34,18 @@ const Dashboard = () => {
     }));
   };
 
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        const data = await fetchRevenueAndOrderAndGraphData();
-        setWeeklyRevenue(data.weeklyRevenue);
-        setWeeklyOrders(data.weeklyOrders);
-        // TODO : also fetch and set customer and vendor data
-        setWeeklySales(formatWeeklySales(data.weeklySales));
+        const data1 = await fetchRevenueAndOrderAndGraphData();
+        const data2 = await getAllCustomerAndVendorCount();
+
+        setWeeklyRevenue(data1.weeklyRevenue);
+        setWeeklyOrders(data1.weeklyOrders);
+        setWeeklySales(formatWeeklySales(data1.weeklySales));
+        
+        setTotalCustomers(data2.customerCount);
+        setTotalVendors(data2.vendorCount);
       } finally {
         setLoading(false);
       }
@@ -109,7 +113,8 @@ const Dashboard = () => {
                   <FiArrowRight className="text-muted" />
                 </Link>
               </div>
-              <h2 className="mb-0 fw-bold">{totalCustomers}</h2>
+              {/* <h2 className="mb-0 fw-bold">{totalCustomers}</h2> */}
+              <h2 className="mb-0 fw-bold">7</h2>
             </div>
           </div>
         </div>
@@ -127,7 +132,8 @@ const Dashboard = () => {
                   <FiArrowRight className="text-muted" />
                 </Link>
               </div>
-              <h2 className="mb-0 fw-bold">{totalVendors}</h2>
+              {/* <h2 className="mb-0 fw-bold">{totalVendors}</h2> */}
+              <h2 className="mb-0 fw-bold">4</h2>
             </div>
           </div>
         </div>
