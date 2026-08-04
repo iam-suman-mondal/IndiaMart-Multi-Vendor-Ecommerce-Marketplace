@@ -13,6 +13,7 @@ export default function BestSellers() {
   const fetchBestSellingProducts = async () => {
     try {
       const data = await getBestSellingProducts();
+      console.log(data)
       setProducts(data);
     } catch (error) {
       console.error("Failed to fetch best selling products", error);
