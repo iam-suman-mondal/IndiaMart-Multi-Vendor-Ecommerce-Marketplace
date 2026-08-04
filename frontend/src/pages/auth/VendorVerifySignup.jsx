@@ -28,7 +28,7 @@ const VendorVerifySignup = () => {
     //   toast.success(response.data);
  toast.success(response.message || "Verification Successful");
       // Redirect to login page
-      navigate("/auth/vendor/login");
+      navigate("/auth/login");
 
     } catch (error) {
       toast.error(error.response?.data || "OTP Verification Failed");

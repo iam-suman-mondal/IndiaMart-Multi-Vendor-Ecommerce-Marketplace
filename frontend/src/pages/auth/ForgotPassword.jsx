@@ -111,7 +111,7 @@ const ForgotPassword = () => {
             <button
               type="button"
               className="btn btn-outline-light w-100"
-              onClick={() => navigate("/auth/customer/login")}
+              onClick={() => navigate("/auth/login")}
             >
               Back to Login
             </button>

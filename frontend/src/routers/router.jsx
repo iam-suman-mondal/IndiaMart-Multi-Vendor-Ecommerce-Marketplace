@@ -80,7 +80,7 @@ export const router = createBrowserRouter([
     element: <AuthLayout />,
     children: [
       {
-        path: "customer/login",
+        path: "login",
         element: <Login />,
       },
       {
@@ -88,8 +88,8 @@ export const router = createBrowserRouter([
         element: <CustomerSignup />,
       },
       {
-    path:"customer/verifysignup",
-      element:<VerifySignup/>
+        path:"customer/verifysignup",
+        element:<VerifySignup/>
       },
       {
         path:"forgotPassword",
@@ -101,22 +101,13 @@ export const router = createBrowserRouter([
       }
       ,
       {
-        path:"vendor/login",
-        element:<Login/>,
-      },
-       {
         path:"vendor/signup",
         element:<VendorSignup/>,
       },
       {
-    path:"vendor/verifysignup",
-      element:<VendorVerifySignup/>
-      },
-       {
-        path:"admin/login",
-        element:<Login />,
-      },
-      
+        path:"vendor/verifysignup",
+        element:<VendorVerifySignup/>
+      },      
     ],
   },
 

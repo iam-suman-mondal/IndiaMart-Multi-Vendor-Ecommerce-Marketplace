@@ -30,7 +30,7 @@ const VerifySignup = () => {
       
 
       // Redirect to login page
-      navigate("/auth/customer/login");
+      navigate("/auth/login");
 
     } catch (error) {
       // toast.error(error.response?.data || "OTP Verification Failed");

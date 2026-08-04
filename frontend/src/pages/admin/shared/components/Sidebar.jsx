@@ -8,7 +8,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     // TODO: logout logic
     toast.success("Successfully logged out")
-    navigate('/auth/admin/login')
+    navigate('/auth/login')
   } 
 
   return (

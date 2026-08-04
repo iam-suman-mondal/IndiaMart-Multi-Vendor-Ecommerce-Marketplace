@@ -51,7 +51,7 @@ const Sidebar = () => {
           <li>
             <button type="button"
             className="btn btn-outline-danger w-100 py-2 fw-bold rounded-3"
-            onClick={()=>navigate('/auth/vendor/login')}
+            onClick={()=>navigate('/auth/login')}
            >
             Logout
             </button>

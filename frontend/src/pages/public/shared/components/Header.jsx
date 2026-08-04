@@ -211,7 +211,7 @@ export default function NavBar() {
                 /* LOGGED OUT VIEW */
                 <>
                   <Link
-                    to="/auth/customer/login"
+                    to="/auth/login"
                     className="btn btn-outline-primary rounded-pill px-3.5 py-1.5 fw-semibold"
                   >
                     Login
@@ -350,7 +350,7 @@ export default function NavBar() {
           ) : (
             <div className="d-flex flex-column gap-2">
               <Link
-                to="/auth/customer/login"
+                to="/auth/login"
                 onClick={() => setShowDrawer(false)}
                 className="btn btn-outline-primary w-100 py-2 rounded-pill fw-semibold"
               >
