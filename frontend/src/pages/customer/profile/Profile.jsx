@@ -135,7 +135,7 @@ const handlerSave = () => {
 
           <button
             className="btn btn-danger"
-            onClick={() => navigate("/auth/customer/login")}
+            onClick={() => navigate("/")}
           >
             Logout
           </button>

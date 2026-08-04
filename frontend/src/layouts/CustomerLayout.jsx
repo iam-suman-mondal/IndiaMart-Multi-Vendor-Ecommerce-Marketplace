@@ -7,7 +7,6 @@ function CustomerLayout() {
   return (
     <>
       <Header />
-      <CategoryTab/>
       <main className="container">
         <Outlet />
       </main>
