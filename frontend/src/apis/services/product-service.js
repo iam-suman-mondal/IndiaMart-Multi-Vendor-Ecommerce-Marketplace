@@ -102,7 +102,7 @@ export const getPresignedUploadUrl = async (extension, contentType) => {
 //   "rating": 5
 // }
 export const addOrUpdateRating = async (productId, payload) => {
-  const response = await api.post(
+  const response = await api.patch(
     `/api/products/${productId}/rating`,
     payload
   );
