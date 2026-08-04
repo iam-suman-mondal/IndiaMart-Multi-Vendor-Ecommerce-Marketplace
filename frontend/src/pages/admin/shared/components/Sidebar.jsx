@@ -1,12 +1,15 @@
+import { useDispatch } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { logout } from "../../../../redux/authSlice";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  
   // handle logout function
   const handleLogout = () => {
-    // TODO: logout logic
+    dispatch(logout());
     toast.success("Successfully logged out")
     navigate('/auth/login')
   } 
