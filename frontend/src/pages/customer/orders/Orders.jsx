@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getAllOrdersForCustomer } from "../../../apis/services/order-service";
+import { addOrUpdateRating } from "../../../apis/services/product-service";
 
 export default function Orders() {
   const navigate = useNavigate();
@@ -8,6 +9,10 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Track product ratings map: { [productId]: ratingValue }
+  const [productRatings, setProductRatings] = useState({});
+  const [submittingRatingId, setSubmittingRatingId] = useState(null);
 
   useEffect(() => {
     fetchCustomerOrders();
@@ -20,13 +25,76 @@ export default function Orders() {
       console.log("Fetching customer order history...");
       const data = await getAllOrdersForCustomer();
       console.log("Orders received:", data);
-      setOrders(Array.isArray(data) ? data : data?.orders || []);
+      
+      const ordersList = Array.isArray(data) ? data : data?.orders || [];
+      setOrders(ordersList);
+
+      // Extract existing user ratings across all items & orders
+      const initialRatings = {};
+      ordersList.forEach((order) => {
+        const items = order.items || order.orderItems || [];
+        items.forEach((item) => {
+          const pId = item.productId || item.product?.productId || item.id || item.product?.id;
+          const userGivenRating =
+            item.userRating ??
+            item.rating ??
+            item.productRating ??
+            item.product?.userRating ??
+            item.product?.rating;
+
+          if (pId && userGivenRating) {
+            initialRatings[pId] = Number(userGivenRating);
+          }
+        });
+      });
+      setProductRatings(initialRatings);
     } catch (error) {
       console.error("Failed to fetch customer orders:", error);
       setErrorMsg("Failed to load your order history. Please try again later.");
       setOrders([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Submit / Update product rating with ONLY rating in payload
+  const handleRateProduct = async (productId, selectedRating) => {
+    if (!productId) {
+      console.error("Product ID is missing:", productId);
+      alert("Cannot submit rating: Product ID is missing.");
+      return;
+    }
+
+    try {
+      setSubmittingRatingId(productId);
+      console.log(`Submitting rating ${selectedRating} for productId:`, productId);
+
+      // Payload containing ONLY rating as requested
+      const payload = {
+        rating: Number(selectedRating),
+      };
+
+      const res = await addOrUpdateRating(productId, payload);
+      console.log("Rating response:", res);
+
+      // Update local state instantly and permanently
+      setProductRatings((prev) => ({
+        ...prev,
+        [productId]: Number(selectedRating),
+      }));
+
+      alert(`Rating updated to ${selectedRating} ★ successfully!`);
+    } catch (error) {
+      console.error("Failed to update rating:", error);
+      const backendErrMsg =
+        error.response?.data?.message ||
+        (typeof error.response?.data === "string" ? error.response.data : null) ||
+        error.message ||
+        "Server error";
+
+      alert(`Failed to submit rating: ${backendErrMsg}`);
+    } finally {
+      setSubmittingRatingId(null);
     }
   };
 
@@ -46,6 +114,67 @@ export default function Orders() {
       return <span className="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1 rounded-pill">Failed / Cancelled ❌</span>;
     }
     return <span className="badge bg-secondary-subtle text-secondary px-2.5 py-1 rounded-pill">{status || "Placed"}</span>;
+  };
+
+  // Interactive 5-Star Component with Persistent Rating Display & Edit Capability
+  const StarRatingPicker = ({ productId, currentRating }) => {
+    const [hoverRating, setHoverRating] = useState(0);
+    const hasGivenRating = Number(currentRating) > 0;
+
+    return (
+      <div className="d-flex align-items-center flex-wrap gap-1.5 mt-1">
+        <span className="small text-muted me-1" style={{ fontSize: "0.75rem" }}>
+          {hasGivenRating ? (
+            <>
+              Your Rating: <strong className="text-dark">{currentRating} ★</strong>
+            </>
+          ) : (
+            "Rate Product:"
+          )}
+        </span>
+
+        {/* 5-Star Interactive Array */}
+        <div className="d-inline-flex align-items-center">
+          {[1, 2, 3, 4, 5].map((star) => {
+            const active = star <= (hoverRating || currentRating || 0);
+            return (
+              <span
+                key={star}
+                style={{
+                  cursor: submittingRatingId === productId ? "wait" : "pointer",
+                  fontSize: "1.15rem",
+                  color: active ? "#ffc107" : "#cbd5e1",
+                  transition: "color 0.15s ease, transform 0.15s ease",
+                  display: "inline-block",
+                  padding: "0 1px",
+                }}
+                onMouseEnter={() => setHoverRating(star)}
+                onMouseLeave={() => setHoverRating(0)}
+                onClick={() => handleRateProduct(productId, star)}
+                title={
+                  hasGivenRating
+                    ? `Click to update rating to ${star} Star${star > 1 ? "s" : ""}`
+                    : `Rate ${star} Star${star > 1 ? "s" : ""}`
+                }
+              >
+                ★
+              </span>
+            );
+          })}
+        </div>
+
+        {/* Badge Indicator for updating */}
+        {hasGivenRating && (
+          <span
+            className="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle ms-1"
+            style={{ fontSize: "0.65rem" }}
+            title="Click any star to update your rating"
+          >
+            Edit Rating ✏️
+          </span>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -105,7 +234,6 @@ export default function Orders() {
           orders.map((order) => {
             const orderId = order.orderId || order.id;
             const items = order.items || order.orderItems || [];
-            // Using grandTotal field name as requested
             const grandTotal = Number(order.grandTotal || order.grand_total || order.total || 0);
             const dateStr = order.createdOn || order.date || order.createdAt;
 
@@ -145,45 +273,115 @@ export default function Orders() {
                     </div>
                   </div>
 
-                  {/* STACKED ITEMS LIST (One Below Another) */}
+                  {/* STACKED ITEMS LIST */}
                   <div className="d-flex flex-column gap-3 my-3 border-top border-bottom py-3">
                     {items.length > 0 ? (
                       items.map((item, idx) => {
-                        const itemPrice = Number(item.price) || 0;
+                        const productId =
+                          item.productId ||
+                          item.product?.productId ||
+                          item.id ||
+                          item.product?.id;
+
+                        const itemName =
+                          item.name ||
+                          item.productName ||
+                          item.product?.name ||
+                          "Product Item";
+
+                        const itemImage =
+                          item.image ||
+                          item.productImage ||
+                          item.product?.image ||
+                          "https://via.placeholder.com/60";
+
+                        const itemPrice = Number(item.price || item.product?.price) || 0;
                         const itemQty = Number(item.quantity || item.qty) || 1;
                         const itemTotal = itemPrice * itemQty;
+
+                        // Check current persistent rating from state or item object
+                        const currentRating =
+                          productRatings[productId] ??
+                          item.userRating ??
+                          item.rating ??
+                          item.productRating ??
+                          item.product?.userRating ??
+                          item.product?.rating ??
+                          0;
+
+                        const itemStatus = (
+                          item.status ||
+                          item.itemStatus ||
+                          item.orderItemStatus ||
+                          order.status ||
+                          order.orderStatus ||
+                          ""
+                        ).toUpperCase();
+
+                        const isItemDelivered =
+                          itemStatus === "DELIVERED" || itemStatus === "COMPLETED";
 
                         return (
                           <div
                             key={idx}
-                            className="d-flex align-items-center justify-content-between gap-3"
+                            className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 border-bottom border-light pb-2"
                           >
                             {/* Image & Title Info */}
                             <div className="d-flex align-items-center gap-3">
                               <img
-                                src={
-                                  item.image ||
-                                  item.productImage ||
-                                  "https://via.placeholder.com/60"
-                                }
-                                alt={item.name || item.productName || "Product"}
+                                src={itemImage}
+                                alt={itemName}
                                 width="56"
                                 height="56"
                                 className="rounded border flex-shrink-0"
                                 style={{ objectFit: "cover", backgroundColor: "#f8fafc" }}
                               />
                               <div>
-                                <h6 className="fw-bold text-dark mb-1 fs-6">
-                                  {item.name || item.productName || "Product Item"}
-                                </h6>
+                                <div className="d-flex align-items-center gap-2">
+                                  <h6 className="fw-bold text-dark mb-0 fs-6">
+                                    {itemName}
+                                  </h6>
+                                  {item.status && (
+                                    <span
+                                      className={`badge ${
+                                        isItemDelivered
+                                          ? "bg-success-subtle text-success"
+                                          : "bg-warning-subtle text-warning-emphasis"
+                                      }`}
+                                      style={{ fontSize: "0.65rem" }}
+                                    >
+                                      {item.status}
+                                    </span>
+                                  )}
+                                </div>
+
                                 <p className="text-muted small mb-0">
                                   Qty: <strong className="text-dark">{itemQty}</strong> × ₹{itemPrice.toLocaleString("en-IN")}
                                 </p>
+
+                                {/* Persistent Rating Control (Shows given rating & allows anytime updates) */}
+                                {isItemDelivered ? (
+                                  <StarRatingPicker
+                                    productId={productId}
+                                    currentRating={currentRating}
+                                  />
+                                ) : (
+                                  <small
+                                    className="text-muted d-block mt-1"
+                                    style={{ fontSize: "0.72rem" }}
+                                  >
+                                    Status:{" "}
+                                    <span className="fw-semibold text-warning-emphasis">
+                                      {item.status || order.status || "In Transit"}
+                                    </span>{" "}
+                                    (Rating available after delivery)
+                                  </small>
+                                )}
                               </div>
                             </div>
 
                             {/* Item Total Price */}
-                            <span className="fw-bold text-dark text-nowrap fs-6">
+                            <span className="fw-bold text-dark text-nowrap fs-6 align-self-sm-center">
                               ₹{itemTotal.toLocaleString("en-IN")}
                             </span>
                           </div>

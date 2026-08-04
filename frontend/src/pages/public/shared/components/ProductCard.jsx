@@ -2,12 +2,14 @@ import React from "react";
 import { Link } from "react-router";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../redux/CartSlice";
+import { toast } from "react-toastify";
 export default function ProductCard({ product }) {
    const dispatch = useDispatch();
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
     dispatch(addToCart(product));
+    toast.success("Product Added To Cart")
   };
   return (
     <>
