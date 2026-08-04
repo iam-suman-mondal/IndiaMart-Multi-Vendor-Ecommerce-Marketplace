@@ -27,6 +27,7 @@ import com.cdac.dto.VendorOrderDetailsDto;
 import com.cdac.dto.WeeklyAnalyticsDto;
 import com.cdac.entity.Order;
 import com.cdac.entity.OrderItem;
+import com.cdac.entity.OrderItemStatus;
 import com.cdac.entity.OrderStatus;
 import com.cdac.entity.VendorOrder;
 import com.cdac.entity.VendorOrderStatus;
@@ -79,6 +80,9 @@ public class OrderServiceImpl implements OrderService {
 
 	    for (OrderItemResponseDto item : items) {
 
+	    	// Set all items status as PENDING
+	    	item.setStatus(OrderItemStatus.PENDING);	    	
+	    	
 	        BigDecimal itemTotal = item.getPrice()
 	                .multiply(BigDecimal.valueOf(item.getQuantity()));
 
@@ -295,6 +299,10 @@ public class OrderServiceImpl implements OrderService {
 		if(vendorOrder.getVendorId() != vendorId) {
 			throw new AccessDeniedException("Access denied");
 		}
+		
+		// Update order items' status to Delivered if VendorOrder is Delivered
+		if(newStatus == VendorOrderStatus.DELIVERED)
+			vendorOrder.getItems().stream().forEach(item -> item.setStatus(OrderItemStatus.DELIVERED));
 		
 		vendorOrder.setStatus(newStatus);
 	}
