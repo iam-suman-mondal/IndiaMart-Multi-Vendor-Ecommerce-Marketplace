@@ -93,7 +93,10 @@ public class AdminController {
     // Only for Admin (returns customer and vendor count)
     @GetMapping("/dashboard/analytics")
     public ResponseEntity<AdminDashboardAnalyticsDto> getVendorDashboardAnalytics(@RequestParam String param) {
-        return ResponseEntity.ok(null); // Todo
+        Long totalCustomers = customerService.getCustomerCount();
+        Long totalVendors = vendorService.getVendorCount();
+        AdminDashboardAnalyticsDto res = new AdminDashboardAnalyticsDto(totalCustomers, totalVendors);
+    	return ResponseEntity.ok(res);
     }
     
     //vendor endpoints

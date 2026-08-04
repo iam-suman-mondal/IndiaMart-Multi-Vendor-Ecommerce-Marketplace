@@ -1,8 +1,15 @@
-import { Outlet } from "react-router";
-import Sidebar from '../pages/admin/shared/components/Sidebar';
+import { Navigate, Outlet, replace } from "react-router";
+import Sidebar from "../pages/admin/shared/components/Sidebar";
+import { useSelector } from "react-redux";
 
 function AdminLayout() {
-  // TODO: authorization logic
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user);
+  
+  // Authorization: Only admins can visit these routes
+  if (!isAuthenticated || user?.role !== "ROLE_ADMIN") {
+    return <Navigate to="/auth/login" replace />;
+  }
 
   return (
     <div className="d-flex vh-100 overflow-hidden bg-light">

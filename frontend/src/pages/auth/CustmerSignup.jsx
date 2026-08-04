@@ -318,7 +318,7 @@ const CustomerSignup = () => {
     <p className="text-center mb-0 mt-3  text-white mb-4">
       Already have an account?
       <Link
-        to="/auth/customer/login"
+        to="/auth/login"
         className="text-decoration-none fw-semibold ms-1"
       >
         Log In

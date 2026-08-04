@@ -17,7 +17,7 @@ export default function PaymentInProcess() {
     if (orderId) {
       verifyAndRedirect();
     } else {
-      navigate("/customer/faild-payment?reason=Missing+Order+ID");
+      navigate("/customer/failed-payment?reason=Missing+Order+ID");
     }
   }, [orderId]);
 
@@ -59,7 +59,7 @@ export default function PaymentInProcess() {
       ) {
 
         navigate(
-          `/customer/faild-payment?orderId=${orderId}&reason=${encodeURIComponent(
+          `/customer/failed-payment?orderId=${orderId}&reason=${encodeURIComponent(
             "Payment Failed"
           )}`
         );
@@ -68,7 +68,7 @@ export default function PaymentInProcess() {
       } else {
 
         navigate(
-          `/customer/faild-payment?orderId=${orderId}&reason=${encodeURIComponent(
+          `/customer/failed-payment?orderId=${orderId}&reason=${encodeURIComponent(
             "Payment Pending or Incomplete"
           )}`
         );
@@ -82,7 +82,7 @@ export default function PaymentInProcess() {
 
 
       navigate(
-        `/customer/faild-payment?orderId=${orderId || ""}&reason=${encodeURIComponent(
+        `/customer/failed-payment?orderId=${orderId || ""}&reason=${encodeURIComponent(
           "Verification Error"
         )}`
       );

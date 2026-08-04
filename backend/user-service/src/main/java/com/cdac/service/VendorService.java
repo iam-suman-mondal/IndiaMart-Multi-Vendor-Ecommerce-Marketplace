@@ -12,4 +12,5 @@ public interface VendorService {
     ApiResponse updateVendor(Long id, VendorDto vendorDto);
     ApiResponse deleteVendor(Long id);
     VendorDto getVendorProfileById(Long id);
+	Long getVendorCount();
 }

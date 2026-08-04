@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,6 +49,9 @@ public class OrderItem {
 
     @Column(nullable = false)
     private Integer quantity;
+    
+    @Enumerated(EnumType.STRING)
+    private OrderItemStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vendor_order_id", nullable = false)

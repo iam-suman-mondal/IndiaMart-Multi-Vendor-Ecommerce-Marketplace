@@ -286,7 +286,7 @@ const VendorSignup = () => {
             <p className="text-center mt-4 mb-0 text-white">
               Already have an account?
               <Link
-                to="/auth/vendor/login"
+                to="/auth/login"
                 className="text-decoration-none fw-semibold ms-1"
               >
                 Log In

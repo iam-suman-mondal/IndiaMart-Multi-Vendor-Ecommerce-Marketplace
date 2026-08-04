@@ -2,6 +2,8 @@ package com.cdac.dto;
 
 import java.math.BigDecimal;
 
+import com.cdac.entity.OrderItemStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +28,6 @@ public class OrderItemResponseDto {
     private BigDecimal price;
 
     private Integer quantity;
+    
+    private OrderItemStatus status;
 }

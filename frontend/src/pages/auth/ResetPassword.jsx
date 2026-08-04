@@ -53,7 +53,7 @@ const ResetPassword = () => {
     
 
       setTimeout(() => {
-        navigate("/auth/customer/login");
+        navigate("/auth/login");
       }, 1500);
     } catch (error) {
       toast.error(
@@ -184,7 +184,7 @@ const ResetPassword = () => {
 
             <button
               className="btn btn-outline-light w-100"
-              onClick={() => navigate("/auth/customer/login")}
+              onClick={() => navigate("/auth/login")}
             >
               Back to Login
             </button>

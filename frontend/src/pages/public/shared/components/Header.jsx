@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import templogo from "./templogo.jpeg";
+import logo from "/logo.jpeg";
 import { Link, useNavigate } from "react-router";
 import { FaShoppingCart, FaShoppingBag, FaBars, FaTimes, FaUser, FaSignOutAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
@@ -115,7 +115,7 @@ export default function NavBar() {
             {/* 1. LOGO */}
             <Link to="/" className="navbar-brand d-flex align-items-center me-0">
               <img
-                src={templogo}
+                src={logo}
                 alt="logo"
                 className="me-2 rounded-2"
                 style={{
@@ -211,7 +211,7 @@ export default function NavBar() {
                 /* LOGGED OUT VIEW */
                 <>
                   <Link
-                    to="/auth/customer/login"
+                    to="/auth/login"
                     className="btn btn-outline-primary rounded-pill px-3.5 py-1.5 fw-semibold"
                   >
                     Login
@@ -350,7 +350,7 @@ export default function NavBar() {
           ) : (
             <div className="d-flex flex-column gap-2">
               <Link
-                to="/auth/customer/login"
+                to="/auth/login"
                 onClick={() => setShowDrawer(false)}
                 className="btn btn-outline-primary w-100 py-2 rounded-pill fw-semibold"
               >
