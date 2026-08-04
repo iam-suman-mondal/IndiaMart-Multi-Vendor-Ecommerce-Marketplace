@@ -113,8 +113,7 @@ const Dashboard = () => {
                   <FiArrowRight className="text-muted" />
                 </Link>
               </div>
-              {/* <h2 className="mb-0 fw-bold">{totalCustomers}</h2> */}
-              <h2 className="mb-0 fw-bold">7</h2>
+              <h2 className="mb-0 fw-bold">{totalCustomers}</h2>
             </div>
           </div>
         </div>
@@ -132,8 +131,7 @@ const Dashboard = () => {
                   <FiArrowRight className="text-muted" />
                 </Link>
               </div>
-              {/* <h2 className="mb-0 fw-bold">{totalVendors}</h2> */}
-              <h2 className="mb-0 fw-bold">4</h2>
+              <h2 className="mb-0 fw-bold">{totalVendors}</h2>
             </div>
           </div>
         </div>
